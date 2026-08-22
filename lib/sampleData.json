@@ -1,0 +1,120 @@
+{
+  "categories": [
+    { "id": "cat-1", "name": "Trending Now", "slug": "trending" },
+    { "id": "cat-2", "name": "Sci-Fi & Cyberpunk", "slug": "sci-fi" },
+    { "id": "cat-3", "name": "Documentaries", "slug": "documentaries" },
+    { "id": "cat-4", "name": "Crime & Thrillers", "slug": "crime-thrillers" },
+    { "id": "cat-5", "name": "Critically Acclaimed", "slug": "critically-acclaimed" }
+  ],
+  "media": [
+    {
+      "id": "m-101",
+      "type": "movie",
+      "title": "Neon Horizon",
+      "slug": "neon-horizon",
+      "synopsis": "In a flood-lit futuristic metropolis, a rogue hacker accidentally uncovers a subterranean network controlling human memory banks.",
+      "releaseYear": 2025,
+      "maturityRating": "MA15+",
+      "duration": "1h 58m",
+      "rating": 4.8,
+      "matchPercentage": 98,
+      "isFeatured": true,
+      "categories": ["cat-1", "cat-2", "cat-5"],
+      "cast": ["Elena Vance", "Marcus Chen", "David O'Reilly"],
+      "director": "Aria Thorne",
+      "posterUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+      "bannerUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1600&auto=format&fit=crop",
+      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    },
+    {
+      "id": "m-102",
+      "type": "tv-show",
+      "title": "Architects of the Mind",
+      "slug": "architects-of-the-mind",
+      "synopsis": "A team of neuroscientists enter the subconscious landscapes of high-profile political figures to alter key historical decisions.",
+      "releaseYear": 2024,
+      "maturityRating": "M",
+      "rating": 4.6,
+      "matchPercentage": 94,
+      "isFeatured": false,
+      "categories": ["cat-1", "cat-2", "cat-4"],
+      "cast": ["Sarah Jenkins", "Liam Hemsworth", "Kaito Tanaka"],
+      "creator": "Julian Mercer",
+      "posterUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
+      "bannerUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop",
+      "seasonsCount": 2,
+      "episodes": [
+        {
+          "id": "ep-101",
+          "season": 1,
+          "episodeNumber": 1,
+          "title": "The First Layer",
+          "duration": "48m",
+          "synopsis": "Dr. Vance recruits her core team to infiltrate the mind of an ambassador during a high-stakes summit.",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
+          "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        },
+        {
+          "id": "ep-102",
+          "season": 1,
+          "episodeNumber": 2,
+          "title": "Echo Chambers",
+          "duration": "52m",
+          "synopsis": "An unexpected mental defense routine traps the team inside a childhood memory loop.",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop",
+          "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        }
+      ]
+    },
+    {
+      "id": "m-103",
+      "type": "movie",
+      "title": "Concrete & Coastlines",
+      "slug": "concrete-and-coastlines",
+      "synopsis": "An intimate look at how coastal megacities are adapting their infrastructure against rising ocean levels and shifting urban densities.",
+      "releaseYear": 2026,
+      "maturityRating": "PG",
+      "duration": "1h 32m",
+      "rating": 4.9,
+      "matchPercentage": 92,
+      "isFeatured": false,
+      "categories": ["cat-3", "cat-5"],
+      "cast": ["Dr. Maya Lin", "Professor Alex Rivera"],
+      "director": "Soren Lindqvist",
+      "posterUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop",
+      "bannerUrl": "https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?q=80&w=1600&auto=format&fit=crop",
+      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+    },
+    {
+      "id": "m-104",
+      "type": "tv-show",
+      "title": "Shadow Syndicate",
+      "slug": "shadow-syndicate",
+      "synopsis": "A disgraced detective forms an uneasy alliance with a cyber-forensics specialist to bring down an international art trafficking ring.",
+      "releaseYear": 2025,
+      "maturityRating": "MA15+",
+      "rating": 4.4,
+      "matchPercentage": 89,
+      "isFeatured": false,
+      "categories": ["cat-1", "cat-4"],
+      "cast": ["Gabriel Ross", "Mei-Ling Zhou"],
+      "creator": "Hannah Sterling",
+      "posterUrl": "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=600&auto=format&fit=crop",
+      "bannerUrl": "https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=1600&auto=format&fit=crop",
+      "seasonsCount": 1,
+      "episodes": [
+        {
+          "id": "ep-201",
+          "season": 1,
+          "episodeNumber": 1,
+          "title": "Canvas of Lies",
+          "duration": "55m",
+          "synopsis": "A high-profile heist at a gallery leads detective Ross to a hidden dark web auction network.",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=600&auto=format&fit=crop",
+          "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+        }
+      ]
+    }
+  ],
+  "sampleUserWatchlist": ["m-101", "m-103"]
+}
