@@ -16,8 +16,8 @@ interface ButtonsProps {
 export default function Buttons({
   type,
   onClick,
-  color = "slate-50",
-  bgColor = "blue-600",
+  color = "foreground",
+  bgColor = "primary",
   colorClasses = `text-${color} bg-${bgColor}`,
   additionalClasses = "",
   className = `${colorClasses} rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg font-semibold flex flex-row items-center hover:bg-opacity-30 transition cursor-pointer ${additionalClasses}`,

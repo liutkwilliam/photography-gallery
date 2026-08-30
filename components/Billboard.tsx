@@ -15,19 +15,6 @@ const Billboard = () => {
 
   return (
     <div className="relative h-[56.25vw]">
-      {/* <video
-        className="
-            w-full
-            h-[56.25vw]
-            object-cover
-            brightness-[60%]
-            "
-        autoPlay
-        muted
-        loop
-        poster={data?.thumbnailUrl}
-        src={data?.videoUrl}
-      ></video> */}
       <Image
         className="w-full h-[56.25vw] object-cover brightness-[50%]"
         src="/luzern_switzerland_2022.jpg"
@@ -70,7 +57,7 @@ const Billboard = () => {
         </p>
         <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
           {/* <PlayButton movieId={data?.id} /> */}
-          <Buttons bgColor="white" color="black">
+          <Buttons>
             <AiOutlineInfoCircle className="w-4 md:w-7 mr-1" />
             More Info
           </Buttons>

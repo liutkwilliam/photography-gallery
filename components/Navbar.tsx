@@ -1,18 +1,16 @@
 "use client"
 
 import { useCallback, useState, useEffect } from 'react';
-import { BsChevronDown, BsSearch, BsBell} from 'react-icons/bs'
+import { BsChevronDown} from 'react-icons/bs'
 import NavbarItem from "./NavbarItem";
 import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
-// import AccountMenu from './AccountMenu';
 import { navList } from '@/constant/navList';
 
 const TOP_OFFSET = 66;
 
 const Navbar = () => {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const [showAccountMenu, setShowAccountMenu] = useState(false);
     const [showBackground, setShowBackground] = useState(false);
 
     useEffect(() => {
@@ -35,12 +33,8 @@ const Navbar = () => {
         setShowMobileMenu((current) => !current);
     }, []);
 
-    // const toggleAccountMenu = useCallback(() => {
-    //     setShowAccountMenu((current) => !current);
-    // }, []);
-
     return (
-        <nav className="w-full fixed z-99">
+        <nav className="w-full fixed z-9999">
             <div className={`
                 px-4
                 md:px-16
@@ -50,7 +44,7 @@ const Navbar = () => {
                 items-center
                 transition
                 duration-500
-                ${showBackground ? 'bg-zinc-900 bg-opacity-90' : ''}
+                ${showBackground ? 'bg-background bg-opacity-50' : ''}
                 `}
             >
                 <Image src="/logo-icon-white.svg" width={40} height={40} alt="Logo" />
@@ -63,23 +57,6 @@ const Navbar = () => {
                     <p className="text-white text-sm">Menu</p>
                     <BsChevronDown className={`text-white transition ${showMobileMenu ? 'rotate-180' : 'rotate-0'}`} />
                     <MobileMenu visible={showMobileMenu} />
-                </div>
-                <div className='flex flex-row ml-auto gap-7 items-center'>
-                    <div className='text-gray-200 hover:text-gray-300 cursor-pointer transition'>
-                        <BsSearch />
-                    </div>
-                    <div className='text-gray-200 hover:text-gray-300 cursor-pointer transition'>
-                        <BsBell />
-                    </div>
-
-                    {/* <div onClick={toggleAccountMenu} className='flex flex-row items-center gap-2 cursor-pointer relative'>
-                        <div className='w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden'>
-                            <img src="/images/default-blue.png" alt="Profile Icon" />
-                        </div>
-                        <BsChevronDown className={`text-white transition ${showAccountMenu ? 'rotate-180' : 'rotate-0'}`} />
-                        <AccountMenu visible={showAccountMenu}/>
-                    </div> */}
-
                 </div>
             </div>
         </nav>

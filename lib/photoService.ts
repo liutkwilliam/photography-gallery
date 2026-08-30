@@ -54,6 +54,7 @@ export async function uploadPhotoBatch(
     
     iso: metadata.iso,
     shutterSpeed: metadata.shutterSpeed,
+    shutterSpeedValue: metadata.shutterSpeedValue,
     aperture: metadata.aperture,
     focalLength: metadata.focalLength,
     cameraModel: metadata.cameraModel,

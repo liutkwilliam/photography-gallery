@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { processPhotoBatch } from "@/lib/extractMetadata";
@@ -40,6 +39,8 @@ interface StoredPhoto {
   iso?: number;
   aperture?: number;
   shutterSpeed?: string;
+  shutterSpeedValue?: number;
+  cameraModel?: string;
   dateOnly?: string;
   timeOnly?: string;
 }
@@ -88,17 +89,20 @@ function parseCoordinates(value: string): Position | null {
   return null;
 }
 
-function getPhotoDate(photo: StoredPhoto) {
-  if (!photo.dateOnly && !photo.timeOnly) return "Date unavailable";
-  return [photo.dateOnly, photo.timeOnly].filter(Boolean).join(" ");
-}
-
 function formatGps(gps: PhotoMetadata["gps"]) {
   if (gps?.latitude == null || gps.longitude == null) return "";
   return ` (${gps.latitude.toFixed(5)}, ${gps.longitude.toFixed(5)})`;
 }
 
-export default function PhotoGalleryUpload() {
+interface PhotoGalleryUploadProps {
+  showSignOut?: boolean;
+  showUploader?: boolean;
+}
+
+export default function PhotoGalleryUpload({
+  showSignOut = false,
+  showUploader = true,
+}: PhotoGalleryUploadProps) {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [category, setCategory] = useState<PhotoCategory>("landscape");
   const [collectionName, setCollectionName] = useState("");
@@ -110,7 +114,6 @@ export default function PhotoGalleryUpload() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState("");
   const [uploadedPhotos, setUploadedPhotos] = useState<StoredPhoto[]>([]);
-  const [activeCollection, setActiveCollection] = useState("All");
 
   const tags = useMemo(() => parseTags(tagInput), [tagInput]);
   const existingCollections = useMemo(
@@ -124,32 +127,6 @@ export default function PhotoGalleryUpload() {
       ).sort((a, b) => a.localeCompare(b)),
     [uploadedPhotos],
   );
-
-  const collectionTabs = useMemo(
-    () => ["All", ...existingCollections],
-    [existingCollections],
-  );
-
-  const visiblePhotos = useMemo(
-    () =>
-      activeCollection === "All"
-        ? uploadedPhotos
-        : uploadedPhotos.filter(
-            (photo) => photo.collectionName === activeCollection,
-          ),
-    [activeCollection, uploadedPhotos],
-  );
-
-  const groupedAlbums = useMemo(() => {
-    return visiblePhotos.reduce<Record<string, StoredPhoto[]>>(
-      (albums, photo) => {
-        const key = photo.collectionName || "Uncategorized";
-        albums[key] = [...(albums[key] || []), photo];
-        return albums;
-      },
-      {},
-    );
-  }, [visiblePhotos]);
 
   useEffect(() => {
     const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
@@ -274,7 +251,6 @@ export default function PhotoGalleryUpload() {
       setSelectedFiles([]);
       setMetadataPreview([]);
       setCollectionName(collection);
-      setActiveCollection(collection);
       setUploadProgress("Upload complete.");
     } catch (error) {
       console.error("Upload Error:", error);
@@ -290,276 +266,197 @@ export default function PhotoGalleryUpload() {
     !isUploading;
 
   return (
-    <main className="mx-auto w-full max-w-7xl px-4 py-8 text-slate-950 sm:px-6 lg:px-8">
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <form className="space-y-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <div>
-            <h1 className="text-2xl font-semibold">Photo Upload Studio</h1>
-            <p className="mt-1 text-sm text-slate-500">
-              Select, classify, extract metadata, upload, and publish albums.
-            </p>
-          </div>
-
-          <label className="block text-sm font-medium">
-            Select Photos
-            <input
-              type="file"
-              multiple
-              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
-              onChange={handleFileChange}
-              className="mt-2 block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-950 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
-            />
-          </label>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm font-medium">
-              Collection
-              <input
-                list="photo-collections"
-                value={collectionName}
-                onChange={(event) => setCollectionName(event.target.value)}
-                placeholder="Choose existing or type a new collection"
-                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              />
-              <datalist id="photo-collections">
-                {existingCollections.map((collectionValue) => (
-                  <option key={collectionValue} value={collectionValue} />
-                ))}
-              </datalist>
-            </label>
-
-            <label className="block text-sm font-medium">
-              Category
-              <select
-                value={category}
-                onChange={(event) =>
-                  setCategory(event.target.value as PhotoCategory)
-                }
-                className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              >
-                {CATEGORY_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {toTitle(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <label className="block text-sm font-medium">
-            Location
-            <input
-              value={locationInput}
-              onChange={handleLocationInputChange}
-              placeholder="Google Maps link, place name, or -33.8688, 151.2093"
-              className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-            />
-          </label>
-
-          <MapPicker
-            position={position}
-            onPositionChange={handlePositionChange}
-          />
-
-          <label className="block text-sm font-medium">
-            Tags
-            <input
-              value={tagInput}
-              onChange={(event) => setTagInput(event.target.value)}
-              placeholder="travel, sunrise, black and white"
-              className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-            />
-          </label>
-
+    <>
+      {showSignOut && (
+        <form
+          action="/api/auth/logout"
+          method="post"
+          className="mb-6 flex justify-end"
+        >
           <Buttons
-            type="button"
-            onClick={handleUploadBatch}
-            disabled={!canUpload}
-            additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-slate-300"
+            type="submit"
+            additionalClasses="border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100"
           >
-            {isUploading
-              ? "Uploading photos..."
-              : `Submit ${selectedFiles.length} Photos`}
+            Sign out
           </Buttons>
-
-          {(uploadProgress || isExtracting) && (
-            <p className="text-sm text-slate-500">
-              {isUploading
-                ? uploadProgress
-                : isExtracting
-                  ? "Extracting EXIF metadata..."
-                  : uploadProgress}
-            </p>
-          )}
         </form>
+      )}
 
-        <section className="rounded-lg border border-slate-200 bg-slate-50 p-5">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold">Metadata Preview</h2>
-            <span className="text-sm text-slate-500">
-              {metadataPreview.length} photos
-            </span>
-          </div>
-
-          <div className="mt-4 max-h-[560px] space-y-3 overflow-y-auto pr-1">
-            {metadataPreview.length === 0 ? (
-              <div className="flex min-h-48 items-center justify-center rounded-md border border-dashed border-slate-300 bg-white text-sm text-slate-500">
-                Select photos to preview extracted date, time, camera, GPS,
-                tags, and category.
-              </div>
-            ) : (
-              metadataPreview.map((photo) => (
-                <article
-                  key={photo.id}
-                  className="rounded-md border border-slate-200 bg-white p-3 text-sm"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <h3 className="truncate font-medium">{photo.fileName}</h3>
-                      <p className="text-xs text-slate-500">
-                        {[photo.dateOnly, photo.timeOnly]
-                          .filter(Boolean)
-                          .join(" ") || "No EXIF date found"}
-                      </p>
-                    </div>
-                    <span className="rounded bg-slate-100 px-2 py-1 text-xs capitalize text-slate-600">
-                      {photo.category}
-                    </span>
-                  </div>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-600 sm:grid-cols-4">
-                    <span>ISO {photo.iso ?? "N/A"}</span>
-                    <span>
-                      {photo.aperture ? `f/${photo.aperture}` : "Aperture N/A"}
-                    </span>
-                    <span>{photo.shutterSpeed ?? "Shutter N/A"}</span>
-                    <span>
-                      {photo.focalLength
-                        ? `${photo.focalLength}mm`
-                        : "Focal N/A"}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-xs text-slate-500">
-                    {photo.locationName || "No location label"}
-                    {formatGps(photo.gps)}
-                  </p>
-                  {photo.tags && photo.tags.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1">
-                      {photo.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-600"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </article>
-              ))
-            )}
-          </div>
-        </section>
-      </section>
-
-      <section className="mt-10">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Photo Albums</h2>
-            <p className="text-sm text-slate-500">
-              {uploadedPhotos.length} photos saved in Firebase
-            </p>
-          </div>
-          <div className="flex max-w-full gap-2 overflow-x-auto">
-            {collectionTabs.map((collectionValue) => (
-              <Buttons
-                key={collectionValue}
-                type="button"
-                onClick={() => setActiveCollection(collectionValue)}
-                additionalClasses={`border px-3 py-2 text-sm ${
-                  activeCollection === collectionValue
-                    ? "border-slate-950 bg-slate-950 text-white"
-                    : "border-slate-300 bg-white text-slate-700"
-                }`}
-              >
-                {collectionValue}
-              </Buttons>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-8">
-          {Object.entries(groupedAlbums).length === 0 ? (
-            <div className="flex min-h-52 items-center justify-center rounded-lg border border-dashed border-slate-300 text-sm text-slate-500">
-              Uploaded photos will appear here as albums.
+      {showUploader && (
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <form className="space-y-5 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+            <div>
+              <h1 className="text-2xl font-semibold">Photo Upload Studio</h1>
+              <p className="mt-1 text-sm text-zinc-500">
+                Select, classify, extract metadata, upload, and publish albums.
+              </p>
             </div>
-          ) : (
-            // Object.entries(groupedAlbums).map(([albumName, photos]) => (
-            Object.entries(groupedAlbums).map(([albumName, photos]) => (
-              <section key={albumName}>
-                <div className="mb-3 flex items-end justify-between">
-                  <h3 className="text-lg font-semibold">{albumName}</h3>
-                  <span className="text-sm text-slate-500">
-                    {photos.length} photos
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  {photos.map((photo) => (
-                    <article
-                      key={photo.id}
-                      className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"
-                    >
-                      <div className="relative aspect-[4/3] w-full bg-slate-100">
-                        <img
-                          src={photo.imageUrl}
-                          alt={photo.fileName}
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="space-y-2 p-3 text-xs text-slate-600">
-                        <div>
-                          <h4 className="truncate text-sm font-medium text-slate-950">
-                            {photo.fileName}
-                          </h4>
-                          <p>{getPhotoDate(photo)}</p>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {albumName && (
-                            <span className="rounded bg-slate-100 px-2 py-1 capitalize">
-                              {albumName}
-                            </span>
-                          )}
-                          {photo.category && (
-                            <span className="rounded bg-slate-100 px-2 py-1 capitalize">
-                              {photo.category}
-                            </span>
-                          )}
-                          {photo.locationName && (
-                            <span className="rounded bg-slate-100 px-2 py-1">
-                              {photo.locationName}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex justify-between gap-2 border-t border-slate-100 pt-2">
-                          <span>ISO {photo.iso ?? "N/A"}</span>
-                          <span>
-                            {photo.aperture ? `f/${photo.aperture}` : "N/A"}
-                          </span>
-                          <span>{photo.shutterSpeed ?? "N/A"}</span>
-                        </div>
-                        {photo.tags && photo.tags.length > 0 && (
-                          <p className="truncate text-slate-500">
-                            {photo.tags.join(", ")}
-                          </p>
-                        )}
-                      </div>
-                    </article>
+
+            <label className="block text-sm font-medium">
+              Select Photos
+              <input
+                type="file"
+                multiple
+                accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+                onChange={handleFileChange}
+                className="mt-2 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+              />
+            </label>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-medium">
+                Collection
+                <input
+                  list="photo-collections"
+                  value={collectionName}
+                  onChange={(event) => setCollectionName(event.target.value)}
+                  placeholder="Choose existing or type a new collection"
+                  className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                />
+                <datalist id="photo-collections">
+                  {existingCollections.map((collectionValue) => (
+                    <option key={collectionValue} value={collectionValue} />
                   ))}
+                </datalist>
+              </label>
+
+              <label className="block text-sm font-medium">
+                Category
+                <select
+                  value={category}
+                  onChange={(event) =>
+                    setCategory(event.target.value as PhotoCategory)
+                  }
+                  className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                >
+                  {CATEGORY_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {toTitle(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <label className="block text-sm font-medium">
+              Location
+              <input
+                value={locationInput}
+                onChange={handleLocationInputChange}
+                placeholder="Google Maps link, place name, or -33.8688, 151.2093"
+                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+              />
+            </label>
+
+            <MapPicker
+              position={position}
+              onPositionChange={handlePositionChange}
+            />
+
+            <label className="block text-sm font-medium">
+              Tags
+              <input
+                value={tagInput}
+                onChange={(event) => setTagInput(event.target.value)}
+                placeholder="travel, sunrise, black and white"
+                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+              />
+            </label>
+
+            <Buttons
+              type="button"
+              onClick={handleUploadBatch}
+              disabled={!canUpload}
+              additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-zinc-300"
+            >
+              {isUploading
+                ? "Uploading photos..."
+                : `Submit ${selectedFiles.length} Photos`}
+            </Buttons>
+
+            {(uploadProgress || isExtracting) && (
+              <p className="text-sm text-zinc-500">
+                {isUploading
+                  ? uploadProgress
+                  : isExtracting
+                    ? "Extracting EXIF metadata..."
+                    : uploadProgress}
+              </p>
+            )}
+          </form>
+
+          <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-5">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold">Metadata Preview</h2>
+              <span className="text-sm text-zinc-500">
+                {metadataPreview.length} photos
+              </span>
+            </div>
+
+            <div className="mt-4 max-h-[560px] space-y-3 overflow-y-auto pr-1">
+              {metadataPreview.length === 0 ? (
+                <div className="flex min-h-48 items-center justify-center rounded-md border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
+                  Select photos to preview extracted date, time, camera, GPS,
+                  tags, and category.
                 </div>
-              </section>
-            ))
-          )}
-        </div>
-      </section>
-    </main>
+              ) : (
+                metadataPreview.map((photo) => (
+                  <article
+                    key={photo.id}
+                    className="rounded-md border border-zinc-200 bg-white p-3 text-sm"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h3 className="truncate font-medium">
+                          {photo.fileName}
+                        </h3>
+                        <p className="text-xs text-zinc-500">
+                          {[photo.dateOnly, photo.timeOnly]
+                            .filter(Boolean)
+                            .join(" ") || "No EXIF date found"}
+                        </p>
+                      </div>
+                      <span className="rounded bg-zinc-100 px-2 py-1 text-xs capitalize text-zinc-600">
+                        {photo.category}
+                      </span>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-zinc-600 sm:grid-cols-4">
+                      <span>ISO {photo.iso ?? "N/A"}</span>
+                      <span>
+                        {photo.aperture
+                          ? `f/${photo.aperture}`
+                          : "Aperture N/A"}
+                      </span>
+                      <span>{photo.shutterSpeed ?? "Shutter N/A"}</span>
+                      <span>
+                        {photo.focalLength
+                          ? `${photo.focalLength}mm`
+                          : "Focal N/A"}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xs text-zinc-500">
+                      {photo.locationName || "No location label"}
+                      {formatGps(photo.gps)}
+                    </p>
+                    {photo.tags && photo.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {photo.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded bg-zinc-100 px-2 py-1 text-xs text-zinc-600"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </article>
+                ))
+              )}
+            </div>
+          </section>
+        </section>
+      )}
+    </>
   );
 }
