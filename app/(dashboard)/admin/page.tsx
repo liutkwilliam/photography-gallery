@@ -5,7 +5,7 @@ export default function AdminPage() {
   return (
     <>
       <PhotoGalleryUpload />
-      <PhotoGallery allowDelete />
+      <PhotoGallery allowDelete allowEdit />
     </>
   );
 }

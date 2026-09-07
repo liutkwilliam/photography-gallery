@@ -9,6 +9,7 @@ import { uploadPhotoBatch } from "@/lib/photoService";
 import { PhotoCategory, PhotoMetadata } from "@/types/photo";
 import MapPicker from "./MapPickerWrapper";
 import Buttons from "./Buttons";
+import Inputs from "./Inputs";
 
 const CATEGORY_OPTIONS: PhotoCategory[] = [
   "landscape",
@@ -107,6 +108,7 @@ export default function PhotoGalleryUpload({
   const [category, setCategory] = useState<PhotoCategory>("landscape");
   const [collectionName, setCollectionName] = useState("");
   const [tagInput, setTagInput] = useState("");
+  const [locationName, setLocationName] = useState("");
   const [locationInput, setLocationInput] = useState("");
   const [position, setPosition] = useState<Position | null>(null);
   const [metadataPreview, setMetadataPreview] = useState<PhotoMetadata[]>([]);
@@ -161,11 +163,6 @@ export default function PhotoGalleryUpload({
       const collection = collectionName.trim() || "Uncategorized";
       const parsedPosition = parseCoordinates(locationInput);
       const gpsPosition = position ?? parsedPosition;
-      const fallbackLocationName =
-        locationInput.trim() ||
-        (gpsPosition
-          ? `${gpsPosition.lat.toFixed(6)}, ${gpsPosition.lng.toFixed(6)}`
-          : "");
 
       try {
         const results = await processPhotoBatch(selectedFiles, {
@@ -174,7 +171,7 @@ export default function PhotoGalleryUpload({
           gps: gpsPosition
             ? { latitude: gpsPosition.lat, longitude: gpsPosition.lng }
             : undefined,
-          locationName: fallbackLocationName || undefined,
+          locationName,
           tags,
         });
 
@@ -192,7 +189,7 @@ export default function PhotoGalleryUpload({
     return () => {
       isCurrent = false;
     };
-  }, [category, collectionName, locationInput, position, selectedFiles, tags]);
+  }, [category, collectionName, locationName, locationInput, position, selectedFiles, tags]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(Array.from(event.target.files || []));
@@ -251,12 +248,19 @@ export default function PhotoGalleryUpload({
       setSelectedFiles([]);
       setMetadataPreview([]);
       setCollectionName(collection);
-      setUploadProgress("Upload complete.");
+      setUploadProgress("Upload complete.");  
     } catch (error) {
       console.error("Upload Error:", error);
       setUploadProgress("Upload failed. Check the console for details.");
     } finally {
       setIsUploading(false);
+      setSelectedFiles([]);
+      setMetadataPreview([]);
+      setCollectionName("");
+      setCategory("landscape");
+      setLocationName("");
+      setLocationInput("");
+      setTagInput("");
     }
   };
 
@@ -269,7 +273,7 @@ export default function PhotoGalleryUpload({
     <>
       {showSignOut && (
         <form
-          action="/api/auth/logout"
+          action="/admin"
           method="post"
           className="mb-6 flex justify-end"
         >
@@ -283,7 +287,7 @@ export default function PhotoGalleryUpload({
       )}
 
       {showUploader && (
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <section className="grid gap-6 lg:grid-cols-3">
           <form className="space-y-5 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
             <div>
               <h1 className="text-2xl font-semibold">Photo Upload Studio</h1>
@@ -339,11 +343,22 @@ export default function PhotoGalleryUpload({
             </div>
 
             <label className="block text-sm font-medium">
-              Location
+              Location Name
+              <input 
+                type="text"
+                value={locationName}
+                onChange={(event) => setLocationName(event.target.value)}
+                placeholder="Enter name of landmark" 
+                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                />
+            </label>
+
+            <label className="block text-sm font-medium">
+              Location Coordinates (GPS)
               <input
                 value={locationInput}
                 onChange={handleLocationInputChange}
-                placeholder="Google Maps link, place name, or -33.8688, 151.2093"
+                placeholder="-33.8688, 151.2093"
                 className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
               />
             </label>
@@ -353,15 +368,12 @@ export default function PhotoGalleryUpload({
               onPositionChange={handlePositionChange}
             />
 
-            <label className="block text-sm font-medium">
-              Tags
-              <input
-                value={tagInput}
-                onChange={(event) => setTagInput(event.target.value)}
-                placeholder="travel, sunrise, black and white"
-                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-              />
-            </label>
+            <Inputs
+              label="Tags"
+              value={tagInput}
+              onChange={(event) => setTagInput(event.target.value)}
+              placeholder="travel, sunrise, black and white"
+            />
 
             <Buttons
               type="button"

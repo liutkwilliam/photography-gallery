@@ -1,7 +1,16 @@
 // lib/photoService.ts
-import { collection, addDoc, serverTimestamp, GeoPoint } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  GeoPoint,
+  doc,
+  updateDoc,
+  deleteField,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { PhotoMetadata } from '@/types/photo';
+import { PhotoItem } from '@/lib/usePhotos';
 
 function removeUndefinedFields<T extends Record<string, unknown>>(value: T): T {
   return Object.fromEntries(
@@ -76,4 +85,59 @@ export async function uploadPhotoBatch(
   const docRef = await addDoc(collection(db, 'photos'), photoDoc);
 
   return { id: docRef.id, ...photoDoc, imageUrl: publicImageUrl };
+}
+
+export type PhotoEntryUpdate = Pick<
+  PhotoItem,
+  | 'fileName'
+  | 'category'
+  | 'collectionName'
+  | 'locationName'
+  | 'tags'
+  | 'dateOnly'
+  | 'timeOnly'
+  | 'iso'
+  | 'aperture'
+  | 'shutterSpeed'
+  | 'shutterSpeedValue'
+  | 'focalLength'
+  | 'cameraModel'
+  | 'lensModel'
+> & {
+  location?: { latitude: number; longitude: number } | null;
+};
+
+export async function updatePhotoEntry(
+  photoId: string,
+  metadata: PhotoEntryUpdate,
+) {
+  const photoRef = doc(db, 'photos', photoId);
+  const photoDoc: Record<string, unknown> = removeUndefinedFields({
+    fileName: metadata.fileName,
+    category: metadata.category,
+    collectionName: metadata.collectionName,
+    locationName: metadata.locationName,
+    tags: metadata.tags ?? [],
+    dateOnly: metadata.dateOnly,
+    timeOnly: metadata.timeOnly,
+    iso: metadata.iso,
+    aperture: metadata.aperture,
+    shutterSpeed: metadata.shutterSpeed,
+    shutterSpeedValue: metadata.shutterSpeedValue,
+    focalLength: metadata.focalLength,
+    cameraModel: metadata.cameraModel,
+    lensModel: metadata.lensModel,
+    updatedAt: serverTimestamp(),
+  });
+
+  if (metadata.location) {
+    photoDoc.location = new GeoPoint(
+      metadata.location.latitude,
+      metadata.location.longitude,
+    );
+  } else {
+    photoDoc.location = deleteField();
+  }
+
+  await updateDoc(photoRef, photoDoc);
 }

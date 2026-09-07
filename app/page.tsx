@@ -1,11 +1,9 @@
-import Billboard from "@/components/Billboard";
-import PhotoGallery from "@/components/PhotoGallery";
+import CoverPhoto from "@/components/CoverPhoto";
 
 export default function Home() {
   return (
     <>
-      <Billboard />
-      <PhotoGallery />
+      <CoverPhoto />
     </>
   );
 }

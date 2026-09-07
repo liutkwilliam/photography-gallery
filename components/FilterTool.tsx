@@ -14,11 +14,14 @@ export interface GalleryFilters {
   minIso: string;
   minAperture: string;
   minShutterSpeed: string;
+  collection: string;
   tags: string;
 }
 
 interface FilterToolProps {
   filters: GalleryFilters;
+  collectionOptions: string[];
+  cameraOptions: string[];
   onChange: (filters: GalleryFilters) => void;
   onReset: () => void;
 }
@@ -48,17 +51,20 @@ export const DEFAULT_GALLERY_FILTERS: GalleryFilters = {
   dateStart: "",
   dateEnd: "",
   timePeriod: "all",
-  camera: "",
+  camera: "All",
   location: "",
   distanceKm: 10,
   minIso: "",
   minAperture: "",
   minShutterSpeed: "",
+  collection: "All",
   tags: "",
 };
 
 export default function FilterTool({
   filters,
+  cameraOptions,
+  collectionOptions,
   onChange,
   onReset,
 }: FilterToolProps) {
@@ -107,13 +113,17 @@ export default function FilterTool({
             updateFilter("timePeriod", event.target.value as TimePeriod)
           }
         />
-
         <Inputs
           label="Camera"
-          type="text"
           value={filters.camera}
+          options={(cameraOptions.at(0) === "All"
+            ? cameraOptions
+            : ["All", ...cameraOptions]
+          ).map((camera) => ({
+            value: camera,
+            label: camera,
+          }))}
           onChange={(event) => updateFilter("camera", event.target.value)}
-          placeholder="Camera model"
         />
 
         <Inputs
@@ -128,8 +138,8 @@ export default function FilterTool({
           <RangeSliders
             label="Distance range"
             min={10}
-            max={100}
-            step={1}
+            max={1000}
+            step={10}
             value={filters.distanceKm}
             onChange={(event) =>
               updateFilter("distanceKm", Number(event.target.value))
@@ -170,12 +180,25 @@ export default function FilterTool({
             updateFilter("minShutterSpeed", event.target.value)
           }
         />
+        <Inputs
+          label="Collection"
+          value={filters.collection}
+          options={(collectionOptions.at(0) === "All"
+            ? collectionOptions
+            : ["All", ...collectionOptions]
+          ).map((collection) => ({
+            value: collection,
+            label: collection,
+          }))}
+          onChange={(event) => updateFilter("collection", event.target.value)}
+        />
 
         <Inputs
           label="Tags"
           type="text"
           value={filters.tags}
           onChange={(event) => updateFilter("tags", event.target.value)}
+          placeholder="Any"
         />
       </div>
     </aside>

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #021F28;
-  --foreground: #f7f9fc;
+  --background: #111819;
+  --foreground: #c9d9df;
   --label: #f1f5f9;
 }
 
 @theme {
   --color-background: var(--background);
-  --color-primary: #00B5B5;
-  --color-secondary: #005c5c;
+  --color-primary: #29569d;
+  --color-secondary: #1a4267;
   --color-foreground: var(--foreground);
   --color-label: var(--label);
 }

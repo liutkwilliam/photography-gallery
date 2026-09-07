@@ -1,17 +1,23 @@
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
 interface NavbarItemProps {
-    label: string;
-    href: string;
+  icon?: React.ReactNode;
+  label: string;
+  href: string;
 }
 
-const NavbarItem: React.FC<NavbarItemProps> = ({label, href}) => {
-    return (
-        <div className="text-white cursor-pointer hover:text-zinc-300 transition">
-            <Link href={href}>{label}</Link>
-        </div>
-    )
-}
+const NavbarItem: React.FC<NavbarItemProps> = ({ icon, label, href }) => {
+  return (
+    <Link href={href}>
+      <div className="group relative flex items-center gap-2 w-max text-zinc-100 hover:text-zinc-300 transition">
+        {icon && <span className="mr-2 cursor-pointer text-3xl">{icon}</span>}
+        <span className="absolute -left-16 lg:-left-2 lg:top-8 scale-0 transition-all rounded bg-gray-800 p-2 text-sm text-zinc-100 group-hover:scale-100">
+          {label}
+        </span>
+      </div>
+    </Link>
+  );
+};
 
 export default NavbarItem;
