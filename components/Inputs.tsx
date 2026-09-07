@@ -44,7 +44,7 @@ export default function Inputs({
           {...props}
         >
           {options.map((option) => (
-            <option key={option.value || option.label} value={option.value}>
+            <option key={option.value || option.label} value={option.value} className="bg-zinc-800 text-zinc-100">
               {option.label}
             </option>
           ))}

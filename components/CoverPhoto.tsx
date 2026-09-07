@@ -6,6 +6,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
 import Buttons from "./Buttons";
 import { usePhotos } from "@/lib/usePhotos";
+import Link from "next/link";
 
 const CoverPhoto = () => {
   const photos = usePhotos();
@@ -40,11 +41,12 @@ const CoverPhoto = () => {
         <p className="text-white text-[.5rem] md:text-lg mt-3 md:mt-8 w-[80%] md:w-[90%] lg:w-[50%] drop-shadow-xl">
           Exploring all the amazing photos from my photography journey.
         </p>
-        <div className="mt-3 md:mt-4 gap-3">
-          <Buttons>
-            <AiOutlineInfoCircle className="w-4 md:w-7 mr-1" />
-            See my photos
-          </Buttons>
+        <div className="mt-3 md:mt-4">
+          <Link href="/gallery">
+            <Buttons additionalClasses="flex flex-row items-center gap-3">
+              <AiOutlineInfoCircle className="w-4 md:w-7 mr-1" /> See my photos
+            </Buttons>
+          </Link>
         </div>
       </div>
       <div className="absolute bottom-[10%] right-0 flex flex-col items-end gap-1 p-4 text-[.5rem] md:text-lg">

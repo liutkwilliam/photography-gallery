@@ -76,17 +76,10 @@ export default function FilterTool({
   };
 
   return (
-    <aside className="w-full rounded-lg border border-zinc-200 bg-zinc-200 text-zinc-800 p-4 shadow-sm lg:max-w-xs">
+    <aside className="w-full rounded-lg bg-zinc-800 text-zinc-100 p-4 shadow-lg lg:max-w-xs">
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-lg font-semibold">Filters</h3>
-        <Buttons
-          type="button"
-          onClick={onReset}
-          bgColor="blue-400"
-          color="zinc-800"
-        >
-          Reset
-        </Buttons>
+        <Buttons onClick={onReset} color="zinc-200" bgColor="zinc-400">Reset</Buttons>
       </div>
 
       <div className="mt-4 space-y-4 text-sm">
@@ -134,21 +127,17 @@ export default function FilterTool({
           placeholder="Place name or -33.8688, 151.2093"
         />
 
-        <div className="mt-1 flex items-center gap-3">
-          <RangeSliders
-            label="Distance range"
-            min={10}
-            max={1000}
-            step={10}
-            value={filters.distanceKm}
-            onChange={(event) =>
-              updateFilter("distanceKm", Number(event.target.value))
-            }
-          />
-          <span className="w-14 text-right text-xs text-zinc-500">
-            {filters.distanceKm} km
-          </span>
-        </div>
+        <RangeSliders
+          label="Distance range"
+          min={10}
+          max={1000}
+          step={10}
+          activeValue={`${filters.distanceKm} km`}
+          value={filters.distanceKm}
+          onChange={(event) =>
+            updateFilter("distanceKm", Number(event.target.value))
+          }
+        />
 
         <div className="grid grid-cols-2 gap-3">
           <Inputs

@@ -16,7 +16,7 @@ interface ButtonsProps {
 export default function Buttons({
   type,
   onClick,
-  color = "foreground",
+  color = "zinc-100",
   bgColor = "primary",
   colorClasses = `text-${color} bg-${bgColor}`,
   additionalClasses = "",

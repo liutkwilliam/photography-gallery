@@ -457,9 +457,9 @@ export default function PhotoGallery({
       {/* photo gallery section */}
       <section id="photoGallery" className="px-4 py-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">Photo Gallery</h2>
-            <p className="text-sm text-zinc-500">
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-semibold text-zinc-100">Photo Gallery</h2>
+            <p className="text-sm text-zinc-300">
               {renderedVisiblePhotos.length} of{" "}
               {renderedCollectionPhotos.length} photos shown
             </p>

@@ -6,6 +6,7 @@ interface RangeSlidersProps {
   max?: number;
   step?: number;
   value?: number;
+  activeValue?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,6 +16,7 @@ export default function RangeSliders({
   max = 100,
   step = 1,
   value = 50,
+  activeValue,
   onChange,
 }: RangeSlidersProps) {
   return (
@@ -22,19 +24,24 @@ export default function RangeSliders({
       <div className="w-full">
         <label
           htmlFor="myRange"
-          className="block mb-2 text-sm font-medium text-zinc-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-zinc-100"
         >
           {label}
         </label>
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          className="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600"
-          onChange={onChange}
-        />
+        <div className="flex items-center gap-4">
+          <input
+            type="range"
+            min={min}
+            max={max}
+            step={step}
+            value={value}
+            className="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer"
+            onChange={onChange}
+          />
+          <span className="w-14 text-right text-sm text-zinc-300">
+            {activeValue}
+          </span>
+        </div>
       </div>
     </>
   );

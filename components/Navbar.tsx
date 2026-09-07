@@ -78,7 +78,7 @@ const Navbar = () => {
                 ${showBackground ? "bg-background bg-opacity-50" : ""}
                 `}
       >
-        <Image src="/logo-icon-white.svg" width={50} height={50} alt="Logo" />
+        <Image src="/logo-icon-white.svg" width={60} height={50} alt="Logo" />
         <div className="w-full flex justify-end">
           <DesktopMenu />
           <div

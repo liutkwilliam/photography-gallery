@@ -53,7 +53,7 @@ export default function MapPicker({ position, onPositionChange }: MapPickerProps
   const defaultCenter = position ?? { lat: -33.8688, lng: 151.2093 };
 
   return (
-    <div className="h-64 w-full rounded-md overflow-hidden border border-zinc-300">
+    <div className="h-80 w-full rounded-md overflow-hidden border border-zinc-300">
       <MapContainer
         center={[defaultCenter.lat, defaultCenter.lng]}
         zoom={12}

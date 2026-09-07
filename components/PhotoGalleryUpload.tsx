@@ -189,7 +189,15 @@ export default function PhotoGalleryUpload({
     return () => {
       isCurrent = false;
     };
-  }, [category, collectionName, locationName, locationInput, position, selectedFiles, tags]);
+  }, [
+    category,
+    collectionName,
+    locationName,
+    locationInput,
+    position,
+    selectedFiles,
+    tags,
+  ]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(Array.from(event.target.files || []));
@@ -248,7 +256,7 @@ export default function PhotoGalleryUpload({
       setSelectedFiles([]);
       setMetadataPreview([]);
       setCollectionName(collection);
-      setUploadProgress("Upload complete.");  
+      setUploadProgress("Upload complete.");
     } catch (error) {
       console.error("Upload Error:", error);
       setUploadProgress("Upload failed. Check the console for details.");
@@ -271,131 +279,131 @@ export default function PhotoGalleryUpload({
 
   return (
     <>
-      {showSignOut && (
-        <form
-          action="/admin"
-          method="post"
-          className="mb-6 flex justify-end"
-        >
-          <Buttons
-            type="submit"
-            additionalClasses="border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100"
-          >
-            Sign out
-          </Buttons>
-        </form>
-      )}
-
       {showUploader && (
-        <section className="grid gap-6 lg:grid-cols-3">
-          <form className="space-y-5 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
-            <div>
-              <h1 className="text-2xl font-semibold">Photo Upload Studio</h1>
-              <p className="mt-1 text-sm text-zinc-500">
-                Select, classify, extract metadata, upload, and publish albums.
-              </p>
-            </div>
-
-            <label className="block text-sm font-medium">
-              Select Photos
-              <input
-                type="file"
-                multiple
-                accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
-                onChange={handleFileChange}
-                className="mt-2 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
-              />
-            </label>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block text-sm font-medium">
-                Collection
-                <input
-                  list="photo-collections"
-                  value={collectionName}
-                  onChange={(event) => setCollectionName(event.target.value)}
-                  placeholder="Choose existing or type a new collection"
-                  className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                />
-                <datalist id="photo-collections">
-                  {existingCollections.map((collectionValue) => (
-                    <option key={collectionValue} value={collectionValue} />
-                  ))}
-                </datalist>
-              </label>
-
-              <label className="block text-sm font-medium">
-                Category
-                <select
-                  value={category}
-                  onChange={(event) =>
-                    setCategory(event.target.value as PhotoCategory)
-                  }
-                  className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                >
-                  {CATEGORY_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {toTitle(option)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <label className="block text-sm font-medium">
-              Location Name
-              <input 
-                type="text"
-                value={locationName}
-                onChange={(event) => setLocationName(event.target.value)}
-                placeholder="Enter name of landmark" 
-                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                />
-            </label>
-
-            <label className="block text-sm font-medium">
-              Location Coordinates (GPS)
-              <input
-                value={locationInput}
-                onChange={handleLocationInputChange}
-                placeholder="-33.8688, 151.2093"
-                className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-              />
-            </label>
-
-            <MapPicker
-              position={position}
-              onPositionChange={handlePositionChange}
-            />
-
-            <Inputs
-              label="Tags"
-              value={tagInput}
-              onChange={(event) => setTagInput(event.target.value)}
-              placeholder="travel, sunrise, black and white"
-            />
-
-            <Buttons
-              type="button"
-              onClick={handleUploadBatch}
-              disabled={!canUpload}
-              additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-zinc-300"
-            >
-              {isUploading
-                ? "Uploading photos..."
-                : `Submit ${selectedFiles.length} Photos`}
-            </Buttons>
-
-            {(uploadProgress || isExtracting) && (
+        <section className="grid gap-4 lg:grid-cols-3">
+          <div className="rounded-lg bg-zinc-100 p-5 shadow-sm col-span-2">
+            <div className="col-span-3 pb-4">
+              <h1 className="text-2xl font-semibold">Upload Photos</h1>
               <p className="text-sm text-zinc-500">
-                {isUploading
-                  ? uploadProgress
-                  : isExtracting
-                    ? "Extracting EXIF metadata..."
-                    : uploadProgress}
+                Select, classify, extract metadata, upload, and publish to photo
+                albums.
               </p>
-            )}
-          </form>
+            </div>
+            <form className="col-span-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <label className="block text-sm font-medium">
+                    Select Photos
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+                      onChange={handleFileChange}
+                      className="mt-2 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+                    />
+                  </label>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block text-sm font-medium">
+                      Collection
+                      <input
+                        list="photo-collections"
+                        value={collectionName}
+                        onChange={(event) =>
+                          setCollectionName(event.target.value)
+                        }
+                        placeholder="Choose existing or type a new collection"
+                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                      />
+                      <datalist id="photo-collections">
+                        {existingCollections.map((collectionValue) => (
+                          <option
+                            key={collectionValue}
+                            value={collectionValue}
+                          />
+                        ))}
+                      </datalist>
+                    </label>
+
+                    <label className="block text-sm font-medium">
+                      Category
+                      <select
+                        value={category}
+                        onChange={(event) =>
+                          setCategory(event.target.value as PhotoCategory)
+                        }
+                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                      >
+                        {CATEGORY_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {toTitle(option)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block text-sm font-medium">
+                      Location Name
+                      <input
+                        type="text"
+                        value={locationName}
+                        onChange={(event) =>
+                          setLocationName(event.target.value)
+                        }
+                        placeholder="Enter name of landmark"
+                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                      />
+                    </label>
+
+                    <label className="block text-sm font-medium">
+                      Location Coordinates (GPS)
+                      <input
+                        value={locationInput}
+                        onChange={handleLocationInputChange}
+                        placeholder="-33.8688, 151.2093"
+                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                      />
+                    </label>
+                  </div>
+
+                  <Inputs
+                    label="Tags"
+                    value={tagInput}
+                    onChange={(event) => setTagInput(event.target.value)}
+                    placeholder="travel, sunrise, black and white"
+                  />
+
+                  <Buttons
+                    type="button"
+                    onClick={handleUploadBatch}
+                    disabled={!canUpload}
+                    additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-zinc-300"
+                  >
+                    {isUploading
+                      ? "Uploading photos..."
+                      : `Submit ${selectedFiles.length} Photos`}
+                  </Buttons>
+
+                  {(uploadProgress || isExtracting) && (
+                    <p className="text-sm text-zinc-500">
+                      {isUploading
+                        ? uploadProgress
+                        : isExtracting
+                          ? "Extracting EXIF metadata..."
+                          : uploadProgress}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-4">
+                  <MapPicker
+                    position={position}
+                    onPositionChange={handlePositionChange}
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
 
           <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-5">
             <div className="flex items-center justify-between gap-3">
