@@ -8,7 +8,7 @@ const isProd = process.env.NODE_ENV === "production";
 const repoName = isProd ? "/photography-gallery" : "";
 
 const nextConfig: NextConfig = {
-  output: "export",
+  // output: "export",
   basePath: repoName,
   assetPrefix: repoName,
 
