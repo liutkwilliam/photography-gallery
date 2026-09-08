@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   assetPrefix: repoName,
 
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
