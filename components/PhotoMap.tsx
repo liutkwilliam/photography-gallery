@@ -101,7 +101,7 @@ export default function PhotoMap() {
   );
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] min-h-[560px] w-full overflow-hidden bg-zinc-100 text-zinc-900">
+    <div className="relative h-[100vh] w-full overflow-hidden bg-zinc-100 text-zinc-900">
       <MapContainer
         center={[-33.8688, 151.2093]}
         zoom={3}
@@ -162,7 +162,7 @@ export default function PhotoMap() {
           );
         })}
       </MapContainer>
-      <div className="pointer-events-none absolute left-4 top-4 z-[500] rounded-md border border-zinc-200 bg-white/95 px-4 py-3 text-zinc-800 shadow-sm">
+      <div className="pointer-events-none absolute left-5 top-20 z-[500] rounded-md border border-zinc-200 bg-white/95 px-4 py-3 text-zinc-800 shadow-sm">
         <h1 className="text-base font-semibold">Photo Map</h1>
         <p className="text-xs text-zinc-500">
           {mappedPhotos.length} pinned photos

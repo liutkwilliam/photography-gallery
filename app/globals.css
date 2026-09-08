@@ -37,3 +37,6 @@
   color: #ffffff !important;
 }
 
+.leaflet-tile-pane {
+  filter: grayscale(100%) invert(100%);
+}

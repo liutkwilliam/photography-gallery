@@ -9,6 +9,7 @@ const repoName = isProd ? "/photography-gallery" : "";
 
 const nextConfig: NextConfig = {
   // output: "export",
+  distDir: 'dist',
   basePath: repoName,
   assetPrefix: repoName,
 

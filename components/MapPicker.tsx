@@ -1,16 +1,23 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
-import L from 'leaflet';
+import React, { useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
+import L from "leaflet";
 
 // Fix Leaflet's default icon missing path issue in Next.js build
-import 'leaflet/dist/leaflet.css';
+import "leaflet/dist/leaflet.css";
 
 const customIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -30,10 +37,7 @@ function MapRecenter({ lat, lng }: { lat: number; lng: number }) {
 }
 
 // Sub-component to capture click events on the map
-function LocationMarker({
-  position,
-  onPositionChange,
-}: MapPickerProps) {
+function LocationMarker({ position, onPositionChange }: MapPickerProps) {
   useMapEvents({
     click(e) {
       onPositionChange({ lat: e.latlng.lat, lng: e.latlng.lng });
@@ -48,12 +52,15 @@ function LocationMarker({
   );
 }
 
-export default function MapPicker({ position, onPositionChange }: MapPickerProps) {
+export default function MapPicker({
+  position,
+  onPositionChange,
+}: MapPickerProps) {
   // Default map center (Sydney, NSW fallback if no position selected)
   const defaultCenter = position ?? { lat: -33.8688, lng: 151.2093 };
 
   return (
-    <div className="h-80 w-full rounded-md overflow-hidden border border-zinc-300">
+    <div className="h-full w-full rounded-md overflow-hidden border border-zinc-300">
       <MapContainer
         center={[defaultCenter.lat, defaultCenter.lng]}
         zoom={12}
@@ -63,8 +70,12 @@ export default function MapPicker({ position, onPositionChange }: MapPickerProps
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          className="leaflet-tile-pane"
         />
-        <LocationMarker position={position} onPositionChange={onPositionChange} />
+        <LocationMarker
+          position={position}
+          onPositionChange={onPositionChange}
+        />
       </MapContainer>
     </div>
   );

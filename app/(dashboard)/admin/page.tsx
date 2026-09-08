@@ -1,3 +1,5 @@
+'use client';
+
 import PhotoGallery from "@/components/PhotoGallery";
 import PhotoGalleryUpload from "@/components/PhotoGalleryUpload";
 

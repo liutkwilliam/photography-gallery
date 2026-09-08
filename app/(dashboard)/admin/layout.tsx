@@ -1,3 +1,5 @@
+'use client';
+
 import Buttons from "@/components/Buttons";
 import type { ReactNode } from "react";
 
