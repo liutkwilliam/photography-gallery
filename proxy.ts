@@ -4,7 +4,7 @@ import { verifySession } from '@/lib/auth';
 const protectedRoutes = ['/admin'];
 const publicRoutes = ['/login'];
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
   const isPublicRoute = publicRoutes.includes(path);

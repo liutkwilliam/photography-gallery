@@ -119,7 +119,7 @@ export default function FilterTool({
           onChange={(event) => updateFilter("camera", event.target.value)}
         />
 
-        <Inputs
+        {/* <Inputs
           label="Location"
           type="text"
           value={filters.location}
@@ -137,7 +137,7 @@ export default function FilterTool({
           onChange={(event) =>
             updateFilter("distanceKm", Number(event.target.value))
           }
-        />
+        /> */}
 
         <div className="grid grid-cols-2 gap-3">
           <Inputs
