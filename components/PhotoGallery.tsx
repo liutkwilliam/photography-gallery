@@ -10,6 +10,7 @@ import FilterTool, {
 import Buttons from "./Buttons";
 import Image from "next/image";
 import { PhotoEntryUpdate, updatePhotoEntry } from "@/lib/photoService";
+import DescriptionBox from "./DescriptionBox";
 
 interface PhotoGalleryProps {
   allowDelete?: boolean;
@@ -242,8 +243,7 @@ export default function PhotoGallery({
   deletingPhotoId,
 }: PhotoGalleryProps) {
   const uploadedPhotos = usePhotos();
-  const [internalActiveCollection] =
-    useState("All");
+  const [internalActiveCollection] = useState("All");
   const [internalFilters, setInternalFilters] = useState<GalleryFilters>(
     DEFAULT_GALLERY_FILTERS,
   );
@@ -289,10 +289,7 @@ export default function PhotoGallery({
     [uploadedPhotos],
   );
 
-  const cameraOptions = useMemo(
-    () => ["All", ...cameraList],
-    [cameraList],
-  );
+  const cameraOptions = useMemo(() => ["All", ...cameraList], [cameraList]);
 
   const existingCollections = useMemo(
     () =>
@@ -458,7 +455,9 @@ export default function PhotoGallery({
       <section id="photoGallery" className="px-4 py-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-semibold text-zinc-100">Photo Gallery</h2>
+            <h2 className="text-2xl font-semibold text-zinc-100">
+              Photo Gallery
+            </h2>
             <p className="text-sm text-zinc-300">
               {renderedVisiblePhotos.length} of{" "}
               {renderedCollectionPhotos.length} photos shown
@@ -485,10 +484,14 @@ export default function PhotoGallery({
                   const isOpen = openPhotoId === photo.id;
 
                   const labelList = [
-                    photo.collectionName,
-                    photo.category,
                     photo.cameraModel,
-                    photo.locationName,
+                    photo.lensModel,
+                  ];
+
+                  const techSpecs = [
+                    `ISO ${photo.iso ?? "N/A"}`,
+                    photo.aperture ? `f/${photo.aperture}` : "N/A",
+                    photo.shutterSpeed ?? "N/A",
                   ];
 
                   return (
@@ -513,26 +516,18 @@ export default function PhotoGallery({
                             sizes="100%"
                           />
                           {isOpen && (
-                            <div className="p-3 text-xs text-zinc-100 bg-zinc-900 opacity-90 absolute insert-0 bottom-0">
+                            <div className="p-2 space-y-2 text-xs text-zinc-100 bg-zinc-900 opacity-90 absolute insert-0 bottom-0 w-full">
+                              <p>{photo.locationName}</p>
                               <p>{getPhotoDate(photo)}</p>
-                              <div className="flex flex-wrap gap-1 pt-2">
+                              <div className="flex flex-wrap gap-1 text-zinc-800">
                                 {labelList.map((photos) => (
-                                  <span
-                                    key={photos}
-                                    className="rounded px-1 py-1"
-                                  >
-                                    {photos}
-                                  </span>
+                                  <DescriptionBox key={photos} spec={photos} />
                                 ))}
                               </div>
-                              <div className="flex justify-between gap-2 pt-2">
-                                <span>ISO {photo.iso ?? "N/A"}</span>
-                                <span>
-                                  {photo.aperture
-                                    ? `f/${photo.aperture}`
-                                    : "N/A"}
-                                </span>
-                                <span>{photo.shutterSpeed ?? "N/A"}</span>
+                              <div className="flex justify-between gap-2">
+                                {techSpecs.map((spec) => (
+                                  <DescriptionBox key={spec} spec={spec} />
+                                ))}
                               </div>
                               {photo.tags && photo.tags.length > 0 && (
                                 <p className="truncate text-zinc-500">

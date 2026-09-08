@@ -7,7 +7,7 @@ import { db } from "@/lib/firebase";
 import { processPhotoBatch } from "@/lib/extractMetadata";
 import { uploadPhotoBatch } from "@/lib/photoService";
 import { PhotoCategory, PhotoMetadata } from "@/types/photo";
-import MapPicker from "./MapPickerWrapper";
+import MapPicker from "./MapPicker";
 import Buttons from "./Buttons";
 import Inputs from "./Inputs";
 

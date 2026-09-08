@@ -22,3 +22,18 @@
   }
 }
 
+.dark-popup .leaflet-popup-content-wrapper,
+.dark-popup .leaflet-popup-tip {
+  background-color: var(--background) !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: style the close button if needed */
+.dark-popup .leaflet-popup-close-button {
+  color: #aaaaaa !important;
+}
+.dark-popup .leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
+

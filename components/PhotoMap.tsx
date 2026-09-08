@@ -2,16 +2,11 @@
 
 import { useEffect, useMemo } from "react";
 import Image from "next/image";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import { PhotoItem, usePhotos } from "@/lib/usePhotos";
 import "leaflet/dist/leaflet.css";
+import DescriptionBox from "./DescriptionBox";
 
 type Position = { lat: number; lng: number };
 
@@ -128,9 +123,10 @@ export default function PhotoMap() {
               icon={photoIcon}
               position={[position.lat, position.lng]}
             >
-              <Popup minWidth={260} maxWidth={320}>
-                <article className="w-72 overflow-hidden rounded-md bg-white text-zinc-800">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-zinc-100">
+              {/* Popup content for each photo marker */}
+              <Popup minWidth={260} maxWidth={320} className="dark-popup">
+                <article className="w-72 overflow-hidden rounded-md bg-background text-xs text-zinc-100">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
                     <Image
                       src={photo.imageUrl}
                       alt={photo.fileName}
@@ -140,30 +136,22 @@ export default function PhotoMap() {
                     />
                   </div>
                   <div className="py-1">
-                    <p className="text-xs text-zinc-500">
+                    <p>
                       {photo.locationName ||
                         `${formatCoordinate(position.lat)}, ${formatCoordinate(
                           position.lng,
                         )}`}
                     </p>
-                    {date && (
-                      <p className="text-xs text-zinc-500">{date}</p>
-                    )}
+                    {date && <p className="text-xs">{date}</p>}
                     {specs.length > 0 && (
                       <dl className="grid grid-cols-2 gap-2 text-xs">
                         {specs.map((spec) => (
-                          <div
-                            key={spec}
-                            className="rounded border border-zinc-200 bg-zinc-50 px-2 py-1"
-                          >
-                            <dt className="sr-only">Photo spec</dt>
-                            <dd>{spec}</dd>
-                          </div>
+                          <DescriptionBox key={spec} spec={spec} />
                         ))}
                       </dl>
                     )}
                     {photo.tags && photo.tags.length > 0 && (
-                      <p className="line-clamp-2 text-xs text-zinc-500">
+                      <p className="line-clamp-2 text-xs text-zinc-400">
                         {photo.tags.join(", ")}
                       </p>
                     )}
