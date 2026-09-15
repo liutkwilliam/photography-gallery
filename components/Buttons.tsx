@@ -16,11 +16,11 @@ interface ButtonsProps {
 export default function Buttons({
   type,
   onClick,
-  color = "zinc-100",
-  bgColor = "primary",
-  colorClasses = `text-${color} bg-${bgColor}`,
+  color = "text-zinc-100",
+  bgColor = "bg-primary",
+  colorClasses = `${color} ${bgColor}`,
   additionalClasses = "",
-  className = `${colorClasses} rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-xs lg:text-lg font-semibold flex flex-row items-center hover:bg-opacity-30 transition cursor-pointer ${additionalClasses}`,
+  className = `${colorClasses} rounded-md p-2 w-auto text-1x1 lg:text-lg font-semibold flex flex-row items-center hover:bg-opacity-30 transition cursor-pointer ${additionalClasses}`,
   disabled,
   children,
 }: ButtonsProps) {

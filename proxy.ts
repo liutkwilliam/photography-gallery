@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { verifySession } from '@/lib/auth';
 
-const protectedRoutes = ['/admin'];
+const protectedRoutes = ['/dashboard'];
 const publicRoutes = ['/login'];
 
 export default async function proxy(req: NextRequest) {
@@ -12,12 +12,12 @@ export default async function proxy(req: NextRequest) {
   const cookie = req.cookies.get('session')?.value;
   const session = cookie ? await verifySession(cookie) : null;
 
-  if (isProtectedRoute && (!session || session.role !== 'admin')) {
+  if (isProtectedRoute && !session) {
     return NextResponse.redirect(new URL('/login', req.nextUrl));
   }
 
-  if (isPublicRoute && session?.role === 'admin') {
-    return NextResponse.redirect(new URL('/admin', req.nextUrl));
+  if (isPublicRoute && session) {
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
   return NextResponse.next();

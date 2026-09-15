@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
@@ -8,20 +8,59 @@ import Buttons from "./Buttons";
 import { usePhotos } from "@/lib/usePhotos";
 import Link from "next/link";
 
-const CoverPhoto = () => {
+interface CoverPhotoProps {
+  intervalMs?: number;
+}
+const CoverPhoto = ({ intervalMs = 5000 }: CoverPhotoProps) => {
   const photos = usePhotos();
-  const [coverSeed] = useState(() => Math.random());
 
-  const currentCover = useMemo(() => {
-    const coverPhotos = photos.filter((photo) => photo.imageUrl);
-    if (coverPhotos.length === 0) return null;
+  // 1. Filter valid photos with imageUrl
+  const coverPhotos = useMemo(() => {
+    return photos.filter((photo) => Boolean(photo.imageUrl));
+  }, [photos]);
 
-    const randomIndex = Math.floor(coverSeed * coverPhotos.length);
-    return coverPhotos[randomIndex];
-  }, [coverSeed, photos]);
+  // 2. Compute a random starting index using Math.random() once on mount
+  const initialIndex = useMemo(() => {
+    if (coverPhotos.length === 0) return 0;
+    // eslint-disable-next-line react-hooks/purity
+    return Math.floor(Math.random() * coverPhotos.length);
+  }, [coverPhotos.length]);
+
+  // 3. Initialize state with the random initial index
+  const [currentIndex, setCurrentIndex] = useState<number>(initialIndex);
+
+  // Sync index if photos load asynchronously after initial render
+  useEffect(() => {
+    if (coverPhotos.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCurrentIndex(initialIndex);
+    }
+  }, [initialIndex, coverPhotos.length]);
+
+  // 4. Timer to continuously pick a new random index
+  useEffect(() => {
+    if (coverPhotos.length <= 1) return;
+
+    const interval: ReturnType<typeof setInterval> = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        let nextIndex: number;
+        // Ensure the new random image is different from the current one
+        do {
+          nextIndex = Math.floor(Math.random() * coverPhotos.length);
+        } while (nextIndex === prevIndex);
+
+        return nextIndex;
+      });
+    }, intervalMs);
+
+    return () => clearInterval(interval);
+  }, [coverPhotos.length, intervalMs]);
+
+  // 5. Select the current photo driven by state
+  const currentCover = coverPhotos[currentIndex] ?? null;
 
   if (!currentCover) {
-    return <div className="w-full- h-[100vh] bg-background animate-pulse" />;
+    return <div className="w-full h-[100vh] bg-background animate-pulse" />;
   }
 
   return (
@@ -32,16 +71,16 @@ const CoverPhoto = () => {
         alt={currentCover.fileName}
         width={1920}
         height={1080}
-        sizes="100vw"
       />
-      <div className="absolute top-[30%] md:top-[35%] ml-4 md:ml-16">
-        <p className="text-white text-1xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
+      {/* title, CTA */}
+      <div className="absolute top-[30%] md:top-[35%] left-5 p-4 text-white space-y-4">
+        <p className="text-2xl md:text-4xl lg:text-6xl font-bold drop-shadow-xl">
           Photography Database
         </p>
-        <p className="text-white text-[.5rem] md:text-lg mt-3 md:mt-8 w-[80%] md:w-[90%] lg:w-[50%] drop-shadow-xl">
+        <p className="text-lg w-[80%] lg:w-[50%] drop-shadow-xl">
           Exploring all the amazing photos from my photography journey.
         </p>
-        <div className="mt-3 md:mt-4">
+        <div className="">
           <Link href="/gallery">
             <Buttons additionalClasses="flex flex-row items-center gap-3">
               <AiOutlineInfoCircle className="w-4 md:w-7 mr-1" /> See my photos
@@ -49,8 +88,9 @@ const CoverPhoto = () => {
           </Link>
         </div>
       </div>
-      <div className="absolute bottom-[10%] right-0 flex flex-col items-end gap-1 p-4 text-[.5rem] md:text-lg">
-        <p className="flex gap-2 items-center">
+      {/* photo info */}
+      <div className="absolute bottom-[10%] right-5 flex flex-col items-end gap-1 p-4 text-xs md:text-lg w-[80%] md:w-full">
+        <p className="flex gap-2 items-center text-right">
           <FaLocationDot />
           <span>{currentCover.locationName}</span>
         </p>

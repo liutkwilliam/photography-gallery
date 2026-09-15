@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import Buttons from "./Buttons";
 import Inputs from "./Inputs";
 import RangeSliders from "./RangeSliders";
@@ -68,6 +69,12 @@ export default function FilterTool({
   onChange,
   onReset,
 }: FilterToolProps) {
+  const [showFilterTool, setShowFilterTool] = useState(false);
+
+  const toggleFilterTool = useCallback(() => {
+    setShowFilterTool((current) => !current);
+  }, []);
+
   const updateFilter = <K extends keyof GalleryFilters>(
     key: K,
     value: GalleryFilters[K],
@@ -79,117 +86,107 @@ export default function FilterTool({
     <aside className="w-full rounded-lg bg-zinc-800 text-zinc-100 p-4 shadow-lg lg:max-w-xs">
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-lg font-semibold">Filters</h3>
-        <Buttons onClick={onReset} color="zinc-200" bgColor="zinc-400">Reset</Buttons>
-      </div>
-
-      <div className="mt-4 space-y-4 text-sm">
-        <div className="grid grid-cols-2 gap-3">
-          <Inputs
-            label="Date start"
-            type="date"
-            value={filters.dateStart}
-            onChange={(event) => updateFilter("dateStart", event.target.value)}
-          />
-          <Inputs
-            label="Date end"
-            type="date"
-            value={filters.dateEnd}
-            onChange={(event) => updateFilter("dateEnd", event.target.value)}
-          />
+        <div className="flex gap-1">
+          <Buttons onClick={onReset} color="text-zinc-300" bgColor="bg-zinc-700" additionalClasses="text-xs">
+            Reset
+          </Buttons>
+          <Buttons onClick={toggleFilterTool} bgColor={showFilterTool ? "bg-red-400" : "bg-primary" }additionalClasses="text-xs">
+            {showFilterTool ? "Collapse" : "Expand"}
+          </Buttons>
         </div>
+      </div>
+      {showFilterTool && (
+        <div className="mt-4 space-y-4 text-sm">
+          <div className="grid grid-cols-2 gap-3">
+            <Inputs
+              label="Date start"
+              type="date"
+              value={filters.dateStart}
+              onChange={(event) =>
+                updateFilter("dateStart", event.target.value)
+              }
+            />
+            <Inputs
+              label="Date end"
+              type="date"
+              value={filters.dateEnd}
+              onChange={(event) => updateFilter("dateEnd", event.target.value)}
+            />
+          </div>
 
-        <Inputs
-          label="Time period"
-          value={filters.timePeriod}
-          options={TIME_OPTIONS}
-          onChange={(event) =>
-            updateFilter("timePeriod", event.target.value as TimePeriod)
-          }
-        />
-        <Inputs
-          label="Camera"
-          value={filters.camera}
-          options={(cameraOptions.at(0) === "All"
-            ? cameraOptions
-            : ["All", ...cameraOptions]
-          ).map((camera) => ({
-            value: camera,
-            label: camera,
-          }))}
-          onChange={(event) => updateFilter("camera", event.target.value)}
-        />
-
-        {/* <Inputs
-          label="Location"
-          type="text"
-          value={filters.location}
-          onChange={(event) => updateFilter("location", event.target.value)}
-          placeholder="Place name or -33.8688, 151.2093"
-        />
-
-        <RangeSliders
-          label="Distance range"
-          min={10}
-          max={1000}
-          step={10}
-          activeValue={`${filters.distanceKm} km`}
-          value={filters.distanceKm}
-          onChange={(event) =>
-            updateFilter("distanceKm", Number(event.target.value))
-          }
-        /> */}
-
-        <div className="grid grid-cols-2 gap-3">
           <Inputs
-            label="Min ISO"
-            type="number"
-            min={0}
-            value={filters.minIso}
-            onChange={(event) => updateFilter("minIso", event.target.value)}
-            placeholder="Any"
-          />
-          <Inputs
-            label="Min aperture"
-            type="number"
-            min={0}
-            step={0.1}
-            value={filters.minAperture}
+            label="Time period"
+            value={filters.timePeriod}
+            options={TIME_OPTIONS}
             onChange={(event) =>
-              updateFilter("minAperture", event.target.value)
+              updateFilter("timePeriod", event.target.value as TimePeriod)
             }
+          />
+          <Inputs
+            label="Camera"
+            value={filters.camera}
+            options={(cameraOptions.at(0) === "All"
+              ? cameraOptions
+              : ["All", ...cameraOptions]
+            ).map((camera) => ({
+              value: camera,
+              label: camera,
+            }))}
+            onChange={(event) => updateFilter("camera", event.target.value)}
+          />
+
+          <div className="grid grid-cols-2 gap-3">
+            <Inputs
+              label="Min ISO"
+              type="number"
+              min={0}
+              value={filters.minIso}
+              onChange={(event) => updateFilter("minIso", event.target.value)}
+              placeholder="Any"
+            />
+            <Inputs
+              label="Min aperture"
+              type="number"
+              min={0}
+              step={0.1}
+              value={filters.minAperture}
+              onChange={(event) =>
+                updateFilter("minAperture", event.target.value)
+              }
+              placeholder="Any"
+            />
+          </div>
+
+          <Inputs
+            label="Min shutter speed"
+            value={filters.minShutterSpeed}
+            options={SHUTTER_OPTIONS}
+            onChange={(event) =>
+              updateFilter("minShutterSpeed", event.target.value)
+            }
+          />
+          <Inputs
+            label="Collection"
+            value={filters.collection}
+            options={(collectionOptions.at(0) === "All"
+              ? collectionOptions
+              : ["All", ...collectionOptions]
+            ).map((collection) => ({
+              value: collection,
+              label: collection,
+            }))}
+            onChange={(event) => updateFilter("collection", event.target.value)}
+          />
+
+          <Inputs
+            label="Tags"
+            type="text"
+            value={filters.tags}
+            onChange={(event) => updateFilter("tags", event.target.value)}
             placeholder="Any"
           />
         </div>
-
-        <Inputs
-          label="Min shutter speed"
-          value={filters.minShutterSpeed}
-          options={SHUTTER_OPTIONS}
-          onChange={(event) =>
-            updateFilter("minShutterSpeed", event.target.value)
-          }
-        />
-        <Inputs
-          label="Collection"
-          value={filters.collection}
-          options={(collectionOptions.at(0) === "All"
-            ? collectionOptions
-            : ["All", ...collectionOptions]
-          ).map((collection) => ({
-            value: collection,
-            label: collection,
-          }))}
-          onChange={(event) => updateFilter("collection", event.target.value)}
-        />
-
-        <Inputs
-          label="Tags"
-          type="text"
-          value={filters.tags}
-          onChange={(event) => updateFilter("tags", event.target.value)}
-          placeholder="Any"
-        />
-      </div>
+      )}
     </aside>
   );
 }

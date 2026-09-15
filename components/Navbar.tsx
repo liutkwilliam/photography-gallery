@@ -5,6 +5,7 @@ import { BsChevronDown } from "react-icons/bs";
 import NavbarItem from "./NavbarItem";
 import Image from "next/image";
 import { navList } from "@/constant/navList";
+import Link from "next/link";
 
 const TOP_OFFSET = 66;
 
@@ -40,7 +41,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ visible }) => {
     return null;
   } else {
     return (
-      <div className="absolute top-8 right-0 p-2 lg:hidden">
+      <div className="absolute top-8 right-0 px-3 py-4 lg:hidden bg-background rounded-full">
         <Menu />
       </div>
     );
@@ -53,12 +54,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= TOP_OFFSET) {
-        setShowBackground(true);
-      } else {
-        setShowBackground(false);
-      }
+      setShowBackground(window.scrollY >= TOP_OFFSET);
     };
+
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
 
@@ -78,16 +77,23 @@ const Navbar = () => {
                 ${showBackground ? "bg-background bg-opacity-50" : ""}
                 `}
       >
-        <Image src="/logo-icon-white.svg" width={60} height={50} alt="Logo" />
+        <Link href="/">
+          <Image src="/logo-icon-white.svg" width={60} height={50} alt="Logo" />
+        </Link>
+
         <div className="w-full flex justify-end">
           <DesktopMenu />
           <div
             onClick={toggleMobileMenu}
             className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative text-zinc-100 text-sm font-bold"
           >
-            <p>Menu</p>
+            <p
+              className={`transition ${showMobileMenu ? "font-bold text-primary" : ""}`}
+            >
+              Menu
+            </p>
             <BsChevronDown
-              className={`transition ${showMobileMenu ? "rotate-180" : "rotate-0"}`}
+              className={`transition ${showMobileMenu ? "rotate-180 text-primary" : "rotate-0"}`}
             />
             <MobileMenu visible={showMobileMenu} />
           </div>

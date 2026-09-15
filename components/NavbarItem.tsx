@@ -21,7 +21,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ icon, label, href }) => {
             : "text-zinc-100 hover:text-zinc-300"
         }`}
       >
-        {icon && <span className="mr-2 cursor-pointer text-3xl">{icon}</span>}
+        {icon && <span className="cursor-pointer text-3xl">{icon}</span>}
         <span className="absolute -left-16 lg:-left-2 lg:top-8 scale-0 transition-all rounded bg-gray-800 p-2 text-sm text-zinc-100 group-hover:scale-100">
           {label}
         </span>

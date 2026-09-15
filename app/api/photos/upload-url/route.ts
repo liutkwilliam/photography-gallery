@@ -1,7 +1,8 @@
 // app/api/photos/upload-url/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { verifySession } from '@/lib/auth';
 
 function getRequiredEnv(name: string): string {
   const value = process.env[name];
@@ -28,8 +29,15 @@ function encodeObjectKeyForUrl(objectKey: string): string {
   return objectKey.split('/').map(encodeURIComponent).join('/');
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const sessionCookie = request.cookies.get('session')?.value;
+    const session = sessionCookie ? await verifySession(sessionCookie) : null;
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { fileName, fileType, collection } = await request.json();
     if (!fileName || typeof fileName !== 'string') {
       return NextResponse.json({ error: 'fileName is required' }, { status: 400 });
