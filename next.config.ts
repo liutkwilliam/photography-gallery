@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
-const r2PublicDomain = process.env.NEXT_PUBLIC_R2_PUBLIC_DOMAIN?.trim()
+const rawR2Domain = process.env.NEXT_PUBLIC_R2_DOMAIN || "";
+const r2PublicDomain = rawR2Domain
   .replace(/^https?:\/\//, "")
   .replace(/\/.*$/, "");
 
