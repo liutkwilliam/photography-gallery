@@ -77,7 +77,7 @@ const CoverPhoto = ({ intervalMs = 5000 }: CoverPhotoProps) => {
       {/* title, CTA */}
       <div className="absolute top-[30%] md:top-[35%] left-5 p-4 text-white space-y-4">
         <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold drop-shadow-xl">
-          Photography Database
+          Photo Gallery by William Liu
         </h1>
         <h2 className="text-lg w-[80%] lg:w-[50%] drop-shadow-xl">
           Exploring all the amazing photos from my photography journey.
