@@ -54,7 +54,7 @@ export default function LoginPage() {
         onSubmit={handleLogin}
         className="w-full max-w-md space-y-4 rounded p-6"
       >
-        <h1 className="text-2xl font-bold">Admin Dashboard Sign In</h1>
+        <h1 className="text-3xl font-semibold">Admin Dashboard Sign In</h1>
         <Inputs
           label="Email Address"
           type="email"

@@ -148,7 +148,7 @@ function PhotoPopup({ group }: { group: PhotoPositionGroup }) {
   };
 
   return (
-    <article className="w-72 overflow-hidden rounded-md bg-background text-xs text-zinc-100">
+    <article className="w-72 overflow-hidden rounded-md bg-background text-xs text-foreground">
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md">
         <Image
           src={activePhoto.imageUrl}
@@ -172,9 +172,9 @@ function PhotoPopup({ group }: { group: PhotoPositionGroup }) {
           </div>
         )}
       </div>
-      <div className="space-y-1 py-1">
+      <div className="space-y-1 p-2">
         {hasCarousel && (
-          <p className="text-[11px] text-zinc-400">
+          <p className="text-xs">
             {activeIndex + 1} of {group.photos.length} photos here
           </p>
         )}
@@ -193,7 +193,7 @@ function PhotoPopup({ group }: { group: PhotoPositionGroup }) {
           </dl>
         )}
         {activePhoto.tags && activePhoto.tags.length > 0 && (
-          <p className="line-clamp-2 text-xs text-zinc-400">
+          <p className="line-clamp-2 text-xs text-foreground/80">
             {activePhoto.tags.join(", ")}
           </p>
         )}
@@ -230,7 +230,7 @@ export default function PhotoMap() {
   );
 
   return (
-    <div className="relative h-[100vh] w-full overflow-hidden bg-zinc-100 text-zinc-900">
+    <div className="relative h-[100vh] w-full overflow-hidden bg-background text-foreground">
       <MapContainer
         center={[-33.8688, 151.2093]}
         zoom={3}
@@ -255,9 +255,9 @@ export default function PhotoMap() {
         ))}
       </MapContainer>
       <div className="absolute left-5 top-20 z-[500] flex max-h-[calc(100vh-6rem)] w-[min(calc(100vw-5.5rem),22rem)] flex-col gap-3 overflow-y-auto">
-        <div className="pointer-events-none rounded-md border border-zinc-200 bg-white/95 px-4 py-3 text-zinc-800 shadow-sm">
-          <h1 className="text-base font-semibold">Photo Map</h1>
-          <p className="text-xs text-zinc-500">
+        <div className="pointer-events-none rounded-md border border-primary bg-background/95 px-4 py-3 text-foreground shadow-sm">
+          <h1 className="text-2xl font-semibold">Photo Map</h1>
+          <p className="text-xs text-foreground/60">
             {pinnedPhotoCount} pinned photos across {photoGroups.length} places
           </p>
         </div>
@@ -270,7 +270,7 @@ export default function PhotoMap() {
         />
       </div>
       {photoGroups.length === 0 && (
-        <div className="pointer-events-none absolute inset-x-4 top-24 z-[500] mx-auto max-w-sm rounded-md border border-zinc-200 bg-white/95 px-4 py-3 text-center text-sm text-zinc-600 shadow-sm">
+        <div className="pointer-events-none absolute inset-x-4 top-24 z-[500] mx-auto max-w-sm rounded-md border border-primary bg-white/95 px-4 py-3 text-center text-sm text-background shadow-sm">
           No photos with GPS coordinates match the current filters.
         </div>
       )}

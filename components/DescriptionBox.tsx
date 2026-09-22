@@ -5,7 +5,7 @@ interface DescriptionBoxProps {
 export default function DescriptionBox({ spec }: DescriptionBoxProps) {
   return (
     <>
-      <div className="rounded border border-zinc-100 bg-zinc-800 text-zinc-100 px-2 py-1">
+      <div className="rounded border border-foreground bg-primary text-background font-semibold px-2 py-1">
         <dt className="sr-only">Photo spec</dt>
         <dd>{spec}</dd>
       </div>

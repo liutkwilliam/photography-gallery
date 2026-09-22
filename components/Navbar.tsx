@@ -78,14 +78,14 @@ const Navbar = () => {
                 `}
       >
         <Link href="/">
-          <Image src="/logo-icon-white.svg" width={60} height={50} alt="Logo" />
+          <Image src="/photo-logo-icon-white.png" width={80} height={60} alt="Logo" />
         </Link>
 
         <div className="w-full flex justify-end">
           <DesktopMenu />
           <div
             onClick={toggleMobileMenu}
-            className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative text-zinc-100 text-sm font-bold"
+            className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative text-foreground text-sm font-bold"
           >
             <p
               className={`transition ${showMobileMenu ? "font-bold text-primary" : ""}`}

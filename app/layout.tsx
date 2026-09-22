@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Photo Gallery by William Liu",
-  description: "An unconventional photo gallery with displaying technical specifications",
+  description:
+    "An unconventional photo gallery with displaying technical specifications",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="bg-background">
+        <div className="bg-background text-foreground">
           <Navbar />
           {children}
           <Footer />

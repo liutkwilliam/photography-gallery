@@ -16,7 +16,7 @@ export default function ArrowButtons({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="flex size-8 items-center justify-center rounded-full bg-zinc-950/70 text-zinc-100 shadow cursor-pointer hover:bg-zinc-950"
+      className="flex size-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow cursor-pointer hover:bg-background/70"
     >
       {icon}
     </button>

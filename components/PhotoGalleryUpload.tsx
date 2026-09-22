@@ -203,10 +203,7 @@ export default function PhotoGalleryUpload({
     setSelectedFiles(Array.from(event.target.files || []));
   };
 
-  const handleLocationInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = event.target.value;
+  const handleLocationInputChange = (value: string) => {
     const parsedPosition = parseCoordinates(value);
 
     setLocationInput(value);
@@ -281,10 +278,10 @@ export default function PhotoGalleryUpload({
     <>
       {showUploader && (
         <section className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-lg bg-zinc-100 p-5 shadow-sm col-span-2">
+          <div className="rounded-lg bg-background-second text-foreground p-5 border border-primary shadow-sm col-span-2">
             <div className="col-span-3 pb-4">
-              <h1 className="text-2xl font-semibold">Upload Photos</h1>
-              <p className="text-sm text-zinc-500">
+              <h1 className="text-3xl font-semibold">Upload Photos</h1>
+              <p className="text-sm">
                 Select, classify, extract metadata, upload, and publish to photo
                 albums.
               </p>
@@ -299,22 +296,20 @@ export default function PhotoGalleryUpload({
                       multiple
                       accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
                       onChange={handleFileChange}
-                      className="mt-2 block w-full text-sm text-zinc-600 file:mr-3 file:rounded-md file:border-0 file:bg-zinc-800 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white"
+                      className="mt-1 block w-full rounded-md border p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-medium file:text-foreground focus:border-primary focus:ring-primary"
                     />
                   </label>
 
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="block text-sm font-medium">
-                      Collection
-                      <input
-                        list="photo-collections"
-                        value={collectionName}
-                        onChange={(event) =>
-                          setCollectionName(event.target.value)
-                        }
-                        placeholder="Choose existing or type a new collection"
-                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                      />
+                    <Inputs
+                      label="Collection"
+                      value={collectionName}
+                      onChange={(event) =>
+                        setCollectionName(event.target.value)
+                      }
+                      placeholder="Choose existing or type a new collection"
+                      list="photo-collections"
+                    >
                       <datalist id="photo-collections">
                         {existingCollections.map((collectionValue) => (
                           <option
@@ -323,48 +318,34 @@ export default function PhotoGalleryUpload({
                           />
                         ))}
                       </datalist>
-                    </label>
+                    </Inputs>
 
-                    <label className="block text-sm font-medium">
-                      Category
-                      <select
-                        value={category}
-                        onChange={(event) =>
-                          setCategory(event.target.value as PhotoCategory)
-                        }
-                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                      >
-                        {CATEGORY_OPTIONS.map((option) => (
-                          <option key={option} value={option}>
-                            {toTitle(option)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
+                    <Inputs
+                      label="Category"
+                      value={category}
+                      options={CATEGORY_OPTIONS.map((option) => ({
+                        value: option,
+                        label: toTitle(option),
+                      }))}
+                      onChange={(event) =>
+                        setCategory(event.target.value as PhotoCategory)
+                      }
+                    />
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="block text-sm font-medium">
-                      Location Name
-                      <input
-                        type="text"
-                        value={locationName}
-                        onChange={(event) =>
-                          setLocationName(event.target.value)
-                        }
-                        placeholder="Enter name of landmark"
-                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                      />
-                    </label>
+                    <Inputs
+                      label="Location Name"
+                      value={locationName}
+                      onChange={(event) => setLocationName(event.target.value)}
+                      placeholder="Enter name of landmark"
+                    />
 
-                    <label className="block text-sm font-medium">
-                      Location Coordinates (GPS)
-                      <input
-                        value={locationInput}
-                        onChange={handleLocationInputChange}
-                        placeholder="-33.8688, 151.2093"
-                        className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
-                      />
-                    </label>
+                    <Inputs
+                      label="Location Coordinates (GPS)"
+                      value={locationInput}
+                      onChange={(event) => handleLocationInputChange(event.target.value)}
+                      placeholder="-33.8688, 151.2093"
+                    />
                   </div>
 
                   <Inputs
@@ -378,7 +359,7 @@ export default function PhotoGalleryUpload({
                     type="button"
                     onClick={handleUploadBatch}
                     disabled={!canUpload}
-                    additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-zinc-300"
+                    additionalClasses="inline-flex w-full items-center justify-center disabled:cursor-not-allowed disabled:bg-reset"
                   >
                     {isUploading
                       ? "Uploading photos..."
@@ -386,7 +367,7 @@ export default function PhotoGalleryUpload({
                   </Buttons>
 
                   {(uploadProgress || isExtracting) && (
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm">
                       {isUploading
                         ? uploadProgress
                         : isExtracting
@@ -405,17 +386,17 @@ export default function PhotoGalleryUpload({
             </form>
           </div>
 
-          <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-5">
+          <section className="rounded-lg border border-primary bg-background-second text-foreground p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold">Metadata Preview</h2>
-              <span className="text-sm text-zinc-500">
+              <span className="text-sm">
                 {metadataPreview.length} photos
               </span>
             </div>
 
             <div className="mt-4 max-h-[560px] space-y-3 overflow-y-auto pr-1">
               {metadataPreview.length === 0 ? (
-                <div className="flex min-h-48 items-center justify-center rounded-md border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
+                <div className="flex min-h-48 items-center justify-center rounded-md bg-white text-sm">
                   Select photos to preview extracted date, time, camera, GPS,
                   tags, and category.
                 </div>
@@ -423,24 +404,24 @@ export default function PhotoGalleryUpload({
                 metadataPreview.map((photo) => (
                   <article
                     key={photo.id}
-                    className="rounded-md border border-zinc-200 bg-white p-3 text-sm"
+                    className="rounded-md border border-primary bg-foreground text-background p-3 text-sm"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <h3 className="truncate font-medium">
                           {photo.fileName}
                         </h3>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs">
                           {[photo.dateOnly, photo.timeOnly]
                             .filter(Boolean)
                             .join(" ") || "No EXIF date found"}
                         </p>
                       </div>
-                      <span className="rounded bg-zinc-100 px-2 py-1 text-xs capitalize text-zinc-600">
+                      <span className="rounded bg-reset px-2 py-1 text-xs capitalize text-foreground">
                         {photo.category}
                       </span>
                     </div>
-                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-zinc-600 sm:grid-cols-4">
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
                       <span>ISO {photo.iso ?? "N/A"}</span>
                       <span>
                         {photo.aperture
@@ -454,7 +435,7 @@ export default function PhotoGalleryUpload({
                           : "Focal N/A"}
                       </span>
                     </div>
-                    <p className="mt-2 text-xs text-zinc-500">
+                    <p className="mt-2 text-xs">
                       {photo.locationName || "No location label"}
                       {formatGps(photo.gps)}
                     </p>
@@ -463,7 +444,7 @@ export default function PhotoGalleryUpload({
                         {photo.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded bg-zinc-100 px-2 py-1 text-xs text-zinc-600"
+                            className="rounded bg-background-second px-2 py-1 text-xs text-foreground"
                           >
                             {tag}
                           </span>

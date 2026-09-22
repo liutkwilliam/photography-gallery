@@ -1,17 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #111819;
-  --foreground: #c9d9df;
-  --label: #f1f5f9;
-}
+    /* Core Palette */
+    --bg-dark: #0D111D;       /* Deep Void (70% dominant) */
+    --text-milky: #F3F0E6;    /* Cosmic Cream (Body & headings) */
+    --brand-sky: #7BB7ED;    /* Cyber sky (Structure & accents) */
+    --brand-sky-tint: #0c1f36;  /* sky-Tinted Dark Slate */
+    --brand-sky-subtle: #767676; /* Subtle sky-Slate Text */
+    --brand-orange: #ff9933;  /* Neon Amber (10% high-impact CTA) */
+
+    /* Semantic / Status Colors */
+    --status-success: #00E676; /* Neon Emerald */
+    --status-warning: #FFB703; /* Solar Flare */
+    --status-error: #FF2A6D;   /* Hyper Crimson */
+    --status-info: #3A86FF;    /* Deep Sky */
+  }
 
 @theme {
-  --color-background: var(--background);
-  --color-primary: #29569d;
-  --color-secondary: #1a4267;
-  --color-foreground: var(--foreground);
-  --color-label: var(--label);
+  --color-background: var(--bg-dark);
+  --color-primary: var(--brand-orange);
+  --color-secondary: var(--brand-sky);
+  --color-foreground: var(--text-milky);
+  --color-label: var(--status-info);
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-error: var(--status-error);
+  --color-info: var(--status-info);
+  --color-reset: var(--brand-sky-subtle);
+  --color-background-second: var(--brand-sky-tint);
 }
 
 @layer base {
@@ -22,11 +38,18 @@
   }
 }
 
+/* map */
 .dark-popup .leaflet-popup-content-wrapper,
 .dark-popup .leaflet-popup-tip {
   background-color: var(--background) !important;
   color: #ffffff !important;
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+}
+
+/*zoom in out tool*/
+.leaflet-control-container{
+  position: absolute;
+  top: 15rem;
 }
 
 /* Optional: style the close button if needed */

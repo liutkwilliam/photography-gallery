@@ -24,7 +24,7 @@ export default function RangeSliders({
       <div className="w-full">
         <label
           htmlFor="myRange"
-          className="block mb-2 text-sm font-medium text-zinc-100"
+          className="block mb-2 text-sm font-medium text-foreground"
         >
           {label}
         </label>
@@ -35,10 +35,10 @@ export default function RangeSliders({
             max={max}
             step={step}
             value={value}
-            className="w-full h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer"
+            className="w-full h-2 bg-foreground rounded-lg appearance-none cursor-pointer"
             onChange={onChange}
           />
-          <span className="w-14 text-right text-sm text-zinc-300">
+          <span className="w-14 text-right text-sm text-foreground/80">
             {activeValue}
           </span>
         </div>

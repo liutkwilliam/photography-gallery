@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+// import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-import Buttons from "./Buttons";
+// import Buttons from "./Buttons";
 import { usePhotos } from "@/lib/usePhotos";
-import Link from "next/link";
+import { FaAngleDoubleDown } from "react-icons/fa";
+import ScrollIndicator from "./ScrollIndicator";
+// import Link from "next/link";
 
 interface CoverPhotoProps {
   intervalMs?: number;
@@ -64,7 +66,7 @@ const CoverPhoto = ({ intervalMs = 5000 }: CoverPhotoProps) => {
   }
 
   return (
-    <div className="relative h-[100vh]">
+    <div className="relative h-[100vh] sticky top-0">
       <Image
         className="w-full h-[100vh] object-cover brightness-[40%]"
         src={currentCover.imageUrl}
@@ -74,20 +76,14 @@ const CoverPhoto = ({ intervalMs = 5000 }: CoverPhotoProps) => {
       />
       {/* title, CTA */}
       <div className="absolute top-[30%] md:top-[35%] left-5 p-4 text-white space-y-4">
-        <p className="text-2xl md:text-4xl lg:text-6xl font-bold drop-shadow-xl">
+        <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold drop-shadow-xl">
           Photography Database
-        </p>
-        <p className="text-lg w-[80%] lg:w-[50%] drop-shadow-xl">
+        </h1>
+        <h2 className="text-lg w-[80%] lg:w-[50%] drop-shadow-xl">
           Exploring all the amazing photos from my photography journey.
-        </p>
-        <div className="">
-          <Link href="/gallery">
-            <Buttons additionalClasses="flex flex-row items-center gap-3">
-              <AiOutlineInfoCircle className="w-4 md:w-7 mr-1" /> See my photos
-            </Buttons>
-          </Link>
-        </div>
+        </h2>
       </div>
+      <ScrollIndicator />
       {/* photo info */}
       <div className="absolute bottom-[10%] right-5 flex flex-col items-end gap-1 p-4 text-xs md:text-lg w-[80%] md:w-full">
         <p className="flex gap-2 items-center text-right">

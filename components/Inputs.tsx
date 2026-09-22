@@ -18,6 +18,7 @@ interface InputsProps {
   disabled?: boolean;
   children?: React.ReactNode;
   required?: boolean;
+  list?: string;
 }
 
 export default function Inputs({
@@ -33,9 +34,10 @@ export default function Inputs({
   children,
   disabled,
   required,
-  ...props
+  list,
+  ...rest
 }: InputsProps) {
-  const controlClasses = "mt-1 block w-full rounded-md border p-2 text-sm disabled:bg-zinc-200 disabled:cursor-not-allowed focus:border-blue-500 focus:ring-blue-500";
+  const controlClasses = "mt-1 block w-full rounded-md border p-2 text-sm disabled:bg-reset/80 disabled:cursor-not-allowed focus:border-blue-500 focus:ring-blue-500";
 
   return (
     <div className="flex flex-col">
@@ -45,10 +47,10 @@ export default function Inputs({
           value={value}
           onChange={onChange}
           className={controlClasses}
-          {...props}
+          {...rest}
         >
           {options.map((option) => (
-            <option key={option.value || option.label} value={option.value} className="bg-zinc-800 text-zinc-100">
+            <option key={option.value || option.label} value={option.value} className="text-foreground bg-background">
               {option.label}
             </option>
           ))}
@@ -65,7 +67,8 @@ export default function Inputs({
           className={controlClasses}
           disabled={disabled}
           required={required}
-          {...props}
+          list={list}
+          {...rest}
         />
       )}
       {children}

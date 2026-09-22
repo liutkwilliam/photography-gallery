@@ -271,10 +271,10 @@ export default function PhotoGallery({
       <section id="photoGallery" className="px-4 py-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-semibold text-zinc-100">
+            <h1 className="text-3xl font-semibold">
               Photo Gallery
-            </h2>
-            <p className="text-sm text-zinc-300">
+            </h1>
+            <p className="text-sm">
               {renderedVisiblePhotos.length} of{" "}
               {renderedCollectionPhotos.length} photos shown
             </p>
@@ -291,7 +291,7 @@ export default function PhotoGallery({
           />
           <div className="min-w-0 flex-1">
             {renderedVisiblePhotos.length === 0 ? (
-              <div className="flex min-h-52 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-sm text-zinc-500">
+              <div className="flex min-h-52 items-center justify-center rounded-lg border border-dashed text-sm">
                 No photos match the current collection and filters.
               </div>
             ) : (
@@ -310,7 +310,7 @@ export default function PhotoGallery({
                   return (
                     <div
                       key={photo.id}
-                      className="aspect-[1/1] rounded-lg border border-zinc-200 bg-white shadow-sm overflow-clip"
+                      className="aspect-[1/1] rounded-lg border border-primary bg-background-second shadow-sm overflow-clip"
                     >
                       <div
                         aria-expanded={isOpen}
@@ -328,10 +328,10 @@ export default function PhotoGallery({
                             sizes="100%"
                           />
                           {isOpen && (
-                            <div className="p-2 space-y-2 text-xs text-zinc-100 bg-zinc-900 opacity-90 absolute insert-0 bottom-0 w-full">
+                            <div className="p-2 space-y-2 text-xs bg-background text-foreground opacity-95 absolute insert-0 bottom-0 w-full">
                               <p>{photo.locationName}</p>
                               <p>{getPhotoDate(photo)}</p>
-                              <div className="flex flex-wrap gap-1 text-zinc-800">
+                              <div className="flex flex-wrap gap-1">
                                 {labelList.map((photos) => (
                                   <DescriptionBox key={photos} spec={photos} />
                                 ))}
@@ -342,17 +342,19 @@ export default function PhotoGallery({
                                 ))}
                               </div>
                               {photo.tags && photo.tags.length > 0 && (
-                                <p className="truncate text-zinc-500">
+                                <p className="truncate text-foreground/60">
                                   {photo.tags.join(", ")}
                                 </p>
                               )}
                               {(allowEdit || allowDelete || onDeletePhoto) && (
-                                <div className="mt-2 flex gap-2 border-t border-zinc-100 pt-2">
+                                <div className="mt-2 grid grid-cols-2 gap-2 border-t border-primary pt-2">
                                   {allowEdit && (
                                     <Buttons
                                       type="button"
                                       onClick={() => startEditingPhoto(photo)}
-                                      additionalClasses="flex-1 justify-center bg-white text-zinc-800 hover:bg-zinc-100"
+                                      bgColor="bg-foreground"
+                                      color="text-background"
+                                      additionalClasses="flex-1 justify-center"
                                     >
                                       Edit
                                     </Buttons>
@@ -364,7 +366,9 @@ export default function PhotoGallery({
                                       disabled={
                                         currentDeletingPhotoId === photo.id
                                       }
-                                      additionalClasses="flex-1 justify-center bg-red-600 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-300"
+                                      bgColor="bg-error"
+                                      color="text-foreground"
+                                      additionalClasses=" flex-1 justify-center disabled:cursor-not-allowed disabled:bg-red-300"
                                     >
                                       {currentDeletingPhotoId === photo.id
                                         ? "Deleting..."
@@ -379,26 +383,26 @@ export default function PhotoGallery({
                       </div>
                       {allowEdit && editingPhotoId === photo.id && (
                         <form
-                          className="fixed inset-0 z-[1000] flex items-center justify-center bg-zinc-950/70 p-4"
+                          className="fixed inset-0 z-[1000] flex items-center justify-center bg-background-second/90 text-background p-4"
                           onSubmit={(event) => {
                             event.preventDefault();
                             handleSavePhoto(photo);
                           }}
                         >
-                          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white p-5 text-zinc-800 shadow-xl">
+                          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-foreground p-5 text-shadow-xl">
                             <div className="flex items-start justify-between gap-4">
                               <div>
                                 <h3 className="text-xl font-semibold">
                                   Edit Photo Entry
                                 </h3>
-                                <p className="mt-1 text-xs text-zinc-500 break-all">
+                                <p className="mt-1 text-xs break-all">
                                   Image link stays unchanged: {photo.imageUrl}
                                 </p>
                               </div>
                               <Buttons
                                 type="button"
                                 onClick={() => setEditingPhotoId(null)}
-                                additionalClasses="bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                                bgColor="bg-reset"
                               >
                                 Close
                               </Buttons>
@@ -447,14 +451,14 @@ export default function PhotoGallery({
                               <Buttons
                                 type="button"
                                 onClick={() => setEditingPhotoId(null)}
-                                additionalClasses="bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                                additionalClasses="bg-reset"
                               >
                                 Cancel
                               </Buttons>
                               <Buttons
                                 type="submit"
                                 disabled={savingPhotoId === photo.id}
-                                additionalClasses="bg-primary text-zinc-900 disabled:cursor-not-allowed disabled:bg-zinc-300"
+                                additionalClasses="disabled:cursor-not-allowed disabled:bg-reset/80"
                               >
                                 {savingPhotoId === photo.id
                                   ? "Saving..."
