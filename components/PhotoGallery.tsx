@@ -311,19 +311,20 @@ export default function PhotoGallery({
                       aria-expanded={isOpen}
                       aria-label={`${isOpen ? "Hide" : "Show"} details for ${photo.fileName}`}
                       onClick={() => setOpenPhotoId(isOpen ? null : photo.id)}
-                      className={`flex gap-2 cursor-pointer text-left group ${isOpen && "col-span-2"}`}
+                      className={`flex gap-2 cursor-pointer text-left group ${isOpen && "md:col-span-2"}`}
                     >
-                      <div className={`${isOpen && "grid grid-cols-2 gap-4"}`}>
+                      <div className={`${isOpen && "grid md:grid-cols-2 gap-4"}`}>
                         <Image
                           src={photo.imageUrl}
                           alt={photo.fileName}
-                          className="aspect-[1/1] w-full object-cover rounded-lg border-2 border-foreground bg-background-second shadow-md hover:border-primary hover:shadow-primary/80 transition-opacity hover:opacity-60"
+                          className={`w-full object-cover rounded-lg border-2 border-foreground bg-background-second shadow-md hover:border-primary hover:shadow-primary/80 transition duration-300 ease-in-out hover:opacity-60
+                            ${isOpen ? "aspect-auto" : "aspect-square"}`}
                           width={400}
                           height={400}
                           sizes="100%"
                         />
                         {isOpen && (
-                          <div className="p-2 space-y-2 text-xs bg-background-second text-foreground w-full aspect-[1/1] rounded-lg border-2 border-primary flex flex-col justify-between group">
+                          <div className="p-2 space-y-2 text-xs bg-background-second text-foreground w-full rounded-lg border-2 border-primary flex flex-col justify-between group">
                             <p>{photo.locationName}</p>
                             <p>{getPhotoDate(photo)}</p>
                             <div className="flex flex-wrap gap-1">
@@ -372,7 +373,11 @@ export default function PhotoGallery({
                                 )}
                               </div>
                             )}
-                            <div className=""><p className="font-semibold opacity-40 group-hover:opacity-100">Click to close</p></div>
+                            <div className="">
+                              <p className="font-semibold opacity-40 group-hover:opacity-100">
+                                Click to close
+                              </p>
+                            </div>
                           </div>
                         )}
                         {allowEdit && editingPhotoId === photo.id && (

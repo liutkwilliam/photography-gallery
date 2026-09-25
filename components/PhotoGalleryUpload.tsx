@@ -101,7 +101,6 @@ interface PhotoGalleryUploadProps {
 }
 
 export default function PhotoGalleryUpload({
-  showSignOut = false,
   showUploader = true,
 }: PhotoGalleryUploadProps) {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

@@ -1,14 +1,10 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-// import { AiOutlineInfoCircle } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
-// import Buttons from "./Buttons";
 import { usePhotos } from "@/lib/usePhotos";
-import { FaAngleDoubleDown } from "react-icons/fa";
 import ScrollIndicator from "./ScrollIndicator";
-// import Link from "next/link";
 
 interface CoverPhotoProps {
   intervalMs?: number;
