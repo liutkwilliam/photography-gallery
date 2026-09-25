@@ -255,7 +255,7 @@ export default function PhotoMap() {
         ))}
       </MapContainer>
       <div className="absolute left-5 top-20 z-[500] flex max-h-[calc(100vh-6rem)] w-[min(calc(100vw-5.5rem),22rem)] flex-col gap-3 overflow-y-auto">
-        <div className="pointer-events-none rounded-md border border-primary bg-background/95 px-4 py-3 text-foreground shadow-sm">
+        <div className="pointer-events-none rounded-md border border-primary bg-background/95 px-4 py-3 text-foreground">
           <h1 className="text-2xl font-semibold">Photo Map</h1>
           <p className="text-xs text-foreground/60">
             {pinnedPhotoCount} pinned photos across {photoGroups.length} places
@@ -270,7 +270,7 @@ export default function PhotoMap() {
         />
       </div>
       {photoGroups.length === 0 && (
-        <div className="pointer-events-none absolute inset-x-4 top-24 z-[500] mx-auto max-w-sm rounded-md border border-primary bg-white/95 px-4 py-3 text-center text-sm text-background shadow-sm">
+        <div className="pointer-events-none absolute inset-x-4 top-24 z-[500] mx-auto max-w-sm rounded-md border border-primary bg-white/95 px-4 py-3 text-center text-sm text-background">
           No photos with GPS coordinates match the current filters.
         </div>
       )}

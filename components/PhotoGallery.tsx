@@ -271,9 +271,7 @@ export default function PhotoGallery({
       <section id="photoGallery" className="px-4 py-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-semibold">
-              Photo Gallery
-            </h1>
+            <h1 className="text-3xl font-semibold">Photo Gallery</h1>
             <p className="text-sm">
               {renderedVisiblePhotos.length} of{" "}
               {renderedCollectionPhotos.length} photos shown
@@ -295,7 +293,7 @@ export default function PhotoGallery({
                 No photos match the current collection and filters.
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
                 {renderedVisiblePhotos.map((photo) => {
                   const isOpen = openPhotoId === photo.id;
 
@@ -310,164 +308,161 @@ export default function PhotoGallery({
                   return (
                     <div
                       key={photo.id}
-                      className="aspect-[1/1] rounded-lg border border-primary bg-background-second shadow-sm overflow-clip"
+                      aria-expanded={isOpen}
+                      aria-label={`${isOpen ? "Hide" : "Show"} details for ${photo.fileName}`}
+                      onClick={() => setOpenPhotoId(isOpen ? null : photo.id)}
+                      className={`flex gap-2 cursor-pointer text-left group ${isOpen && "col-span-2"}`}
                     >
-                      <div
-                        aria-expanded={isOpen}
-                        aria-label={`${isOpen ? "Hide" : "Show"} details for ${photo.fileName}`}
-                        onClick={() => setOpenPhotoId(isOpen ? null : photo.id)}
-                        className="block w-full cursor-pointer text-left"
-                      >
-                        <div className="relative col-start-1 row-start-1">
-                          <Image
-                            src={photo.imageUrl}
-                            alt={photo.fileName}
-                            className="aspect-[1/1] w-full object-cover transition-opacity hover:opacity-90"
-                            width={400}
-                            height={400}
-                            sizes="100%"
-                          />
-                          {isOpen && (
-                            <div className="p-2 space-y-2 text-xs bg-background text-foreground opacity-95 absolute insert-0 bottom-0 w-full">
-                              <p>{photo.locationName}</p>
-                              <p>{getPhotoDate(photo)}</p>
-                              <div className="flex flex-wrap gap-1">
-                                {labelList.map((photos) => (
-                                  <DescriptionBox key={photos} spec={photos} />
-                                ))}
-                              </div>
-                              <div className="flex justify-between gap-2">
-                                {techSpecs.map((spec) => (
-                                  <DescriptionBox key={spec} spec={spec} />
-                                ))}
-                              </div>
-                              {photo.tags && photo.tags.length > 0 && (
-                                <p className="truncate text-foreground/60">
-                                  {photo.tags.join(", ")}
-                                </p>
-                              )}
-                              {(allowEdit || allowDelete || onDeletePhoto) && (
-                                <div className="mt-2 grid grid-cols-2 gap-2 border-t border-primary pt-2">
-                                  {allowEdit && (
-                                    <Buttons
-                                      type="button"
-                                      onClick={() => startEditingPhoto(photo)}
-                                      bgColor="bg-foreground"
-                                      color="text-background"
-                                      additionalClasses="flex-1 justify-center"
-                                    >
-                                      Edit
-                                    </Buttons>
-                                  )}
-                                  {(allowDelete || onDeletePhoto) && (
-                                    <Buttons
-                                      type="button"
-                                      onClick={() => handleDeletePhoto(photo)}
-                                      disabled={
-                                        currentDeletingPhotoId === photo.id
-                                      }
-                                      bgColor="bg-error"
-                                      color="text-foreground"
-                                      additionalClasses=" flex-1 justify-center disabled:cursor-not-allowed disabled:bg-red-300"
-                                    >
-                                      {currentDeletingPhotoId === photo.id
-                                        ? "Deleting..."
-                                        : "Delete"}
-                                    </Buttons>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      {allowEdit && editingPhotoId === photo.id && (
-                        <form
-                          className="fixed inset-0 z-[1000] flex items-center justify-center bg-background-second/90 text-background p-4"
-                          onSubmit={(event) => {
-                            event.preventDefault();
-                            handleSavePhoto(photo);
-                          }}
-                        >
-                          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-foreground p-5 text-shadow-xl">
-                            <div className="flex items-start justify-between gap-4">
-                              <div>
-                                <h3 className="text-xl font-semibold">
-                                  Edit Photo Entry
-                                </h3>
-                                <p className="mt-1 text-xs break-all">
-                                  Image link stays unchanged: {photo.imageUrl}
-                                </p>
-                              </div>
-                              <Buttons
-                                type="button"
-                                onClick={() => setEditingPhotoId(null)}
-                                bgColor="bg-reset"
-                              >
-                                Close
-                              </Buttons>
-                            </div>
-
-                            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                              {[
-                                ["fileName", "File name"],
-                                ["collectionName", "Collection"],
-                                ["category", "Category"],
-                                ["locationName", "Location label"],
-                                ["latitude", "Latitude"],
-                                ["longitude", "Longitude"],
-                                ["dateOnly", "Date"],
-                                ["timeOnly", "Time"],
-                                ["cameraModel", "Camera model"],
-                                ["lensModel", "Lens model"],
-                                ["iso", "ISO"],
-                                ["aperture", "Aperture"],
-                                ["shutterSpeed", "Shutter speed"],
-                                ["shutterSpeedValue", "Shutter seconds"],
-                                ["focalLength", "Focal length"],
-                                ["tags", "Tags"],
-                              ].map(([field, label]) => (
-                                <label
-                                  key={field}
-                                  className="block text-sm font-medium"
-                                >
-                                  {label}
-                                  <Inputs
-                                    value={
-                                      editForm[field as keyof typeof editForm]
-                                    }
-                                    onChange={(event) =>
-                                      updateEditField(
-                                        field as keyof typeof editForm,
-                                        event.target.value,
-                                      )
-                                    }
-                                  />
-                                </label>
+                      <div className={`${isOpen && "grid grid-cols-2 gap-4"}`}>
+                        <Image
+                          src={photo.imageUrl}
+                          alt={photo.fileName}
+                          className="aspect-[1/1] w-full object-cover rounded-lg border-2 border-foreground bg-background-second shadow-md hover:border-primary hover:shadow-primary/80 transition-opacity hover:opacity-60"
+                          width={400}
+                          height={400}
+                          sizes="100%"
+                        />
+                        {isOpen && (
+                          <div className="p-2 space-y-2 text-xs bg-background-second text-foreground w-full aspect-[1/1] rounded-lg border-2 border-primary flex flex-col justify-between group">
+                            <p>{photo.locationName}</p>
+                            <p>{getPhotoDate(photo)}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {labelList.map((photos) => (
+                                <DescriptionBox key={photos} spec={photos} />
                               ))}
                             </div>
-
-                            <div className="mt-5 flex justify-end gap-2">
-                              <Buttons
-                                type="button"
-                                onClick={() => setEditingPhotoId(null)}
-                                additionalClasses="bg-reset"
-                              >
-                                Cancel
-                              </Buttons>
-                              <Buttons
-                                type="submit"
-                                disabled={savingPhotoId === photo.id}
-                                additionalClasses="disabled:cursor-not-allowed disabled:bg-reset/80"
-                              >
-                                {savingPhotoId === photo.id
-                                  ? "Saving..."
-                                  : "Save changes"}
-                              </Buttons>
+                            <div className="flex justify-between gap-2">
+                              {techSpecs.map((spec) => (
+                                <DescriptionBox key={spec} spec={spec} />
+                              ))}
                             </div>
+                            {photo.tags && photo.tags.length > 0 && (
+                              <p className="truncate text-foreground/60">
+                                {photo.tags.join(", ")}
+                              </p>
+                            )}
+                            {(allowEdit || allowDelete || onDeletePhoto) && (
+                              <div className="mt-2 grid grid-cols-2 gap-2 border-t border-primary pt-2">
+                                {allowEdit && (
+                                  <Buttons
+                                    type="button"
+                                    onClick={() => startEditingPhoto(photo)}
+                                    bgColor="bg-foreground"
+                                    color="text-background"
+                                    additionalClasses="flex-1 justify-center"
+                                  >
+                                    Edit
+                                  </Buttons>
+                                )}
+                                {(allowDelete || onDeletePhoto) && (
+                                  <Buttons
+                                    type="button"
+                                    onClick={() => handleDeletePhoto(photo)}
+                                    disabled={
+                                      currentDeletingPhotoId === photo.id
+                                    }
+                                    bgColor="bg-error"
+                                    color="text-foreground"
+                                    additionalClasses=" flex-1 justify-center disabled:cursor-not-allowed disabled:bg-error/50"
+                                  >
+                                    {currentDeletingPhotoId === photo.id
+                                      ? "Deleting..."
+                                      : "Delete"}
+                                  </Buttons>
+                                )}
+                              </div>
+                            )}
+                            <div className=""><p className="font-semibold opacity-40 group-hover:opacity-100">Click to close</p></div>
                           </div>
-                        </form>
-                      )}
+                        )}
+                        {allowEdit && editingPhotoId === photo.id && (
+                          <form
+                            className="fixed inset-0 z-[1000] flex items-center justify-center bg-background-second/90 text-background p-4"
+                            onSubmit={(event) => {
+                              event.preventDefault();
+                              handleSavePhoto(photo);
+                            }}
+                          >
+                            <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-foreground p-5 text-shadow-xl">
+                              <div className="flex items-start justify-between gap-4">
+                                <div>
+                                  <h3 className="text-xl font-semibold">
+                                    Edit Photo Entry
+                                  </h3>
+                                  <p className="mt-1 text-xs break-all">
+                                    Image link stays unchanged: {photo.imageUrl}
+                                  </p>
+                                </div>
+                                <Buttons
+                                  type="button"
+                                  onClick={() => setEditingPhotoId(null)}
+                                  bgColor="bg-reset"
+                                >
+                                  Close
+                                </Buttons>
+                              </div>
+
+                              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                                {[
+                                  ["fileName", "File name"],
+                                  ["collectionName", "Collection"],
+                                  ["category", "Category"],
+                                  ["locationName", "Location label"],
+                                  ["latitude", "Latitude"],
+                                  ["longitude", "Longitude"],
+                                  ["dateOnly", "Date"],
+                                  ["timeOnly", "Time"],
+                                  ["cameraModel", "Camera model"],
+                                  ["lensModel", "Lens model"],
+                                  ["iso", "ISO"],
+                                  ["aperture", "Aperture"],
+                                  ["shutterSpeed", "Shutter speed"],
+                                  ["shutterSpeedValue", "Shutter seconds"],
+                                  ["focalLength", "Focal length"],
+                                  ["tags", "Tags"],
+                                ].map(([field, label]) => (
+                                  <label
+                                    key={field}
+                                    className="block text-sm font-medium"
+                                  >
+                                    {label}
+                                    <Inputs
+                                      value={
+                                        editForm[field as keyof typeof editForm]
+                                      }
+                                      onChange={(event) =>
+                                        updateEditField(
+                                          field as keyof typeof editForm,
+                                          event.target.value,
+                                        )
+                                      }
+                                    />
+                                  </label>
+                                ))}
+                              </div>
+
+                              <div className="mt-5 flex justify-end gap-2">
+                                <Buttons
+                                  type="button"
+                                  onClick={() => setEditingPhotoId(null)}
+                                  additionalClasses="bg-reset"
+                                >
+                                  Cancel
+                                </Buttons>
+                                <Buttons
+                                  type="submit"
+                                  disabled={savingPhotoId === photo.id}
+                                  additionalClasses="disabled:cursor-not-allowed disabled:bg-reset/80"
+                                >
+                                  {savingPhotoId === photo.id
+                                    ? "Saving..."
+                                    : "Save changes"}
+                                </Buttons>
+                              </div>
+                            </div>
+                          </form>
+                        )}
+                      </div>
                     </div>
                   );
                 })}

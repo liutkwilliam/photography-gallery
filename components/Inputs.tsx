@@ -37,7 +37,7 @@ export default function Inputs({
   list,
   ...rest
 }: InputsProps) {
-  const controlClasses = "mt-1 block w-full rounded-md border p-2 text-sm disabled:bg-reset/80 disabled:cursor-not-allowed focus:border-blue-500 focus:ring-blue-500";
+  const controlClasses = "mt-1 block w-full rounded-md border border-foreground p-2 text-sm focus:border-primary focus:outline focus:outline-primary focus:invalid:border-error focus:invalid:outline-error disabled:bg-reset/80 disabled:cursor-not-allowed";
 
   return (
     <div className="flex flex-col">

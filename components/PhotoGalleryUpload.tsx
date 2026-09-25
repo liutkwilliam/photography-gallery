@@ -278,7 +278,7 @@ export default function PhotoGalleryUpload({
     <>
       {showUploader && (
         <section className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-lg bg-background-second text-foreground p-5 border border-primary shadow-sm col-span-2">
+          <div className="rounded-lg bg-background-second text-foreground p-5 border border-primary col-span-2">
             <div className="col-span-3 pb-4">
               <h1 className="text-3xl font-semibold">Upload Photos</h1>
               <p className="text-sm">
@@ -343,7 +343,9 @@ export default function PhotoGalleryUpload({
                     <Inputs
                       label="Location Coordinates (GPS)"
                       value={locationInput}
-                      onChange={(event) => handleLocationInputChange(event.target.value)}
+                      onChange={(event) =>
+                        handleLocationInputChange(event.target.value)
+                      }
                       placeholder="-33.8688, 151.2093"
                     />
                   </div>
@@ -365,16 +367,17 @@ export default function PhotoGalleryUpload({
                       ? "Uploading photos..."
                       : `Submit ${selectedFiles.length} Photos`}
                   </Buttons>
-
-                  {(uploadProgress || isExtracting) && (
-                    <p className="text-sm">
-                      {isUploading
-                        ? uploadProgress
-                        : isExtracting
-                          ? "Extracting EXIF metadata..."
-                          : uploadProgress}
-                    </p>
-                  )}
+                  <div className="h-2">
+                    {(uploadProgress || isExtracting) && (
+                      <p className="text-sm">
+                        {isUploading
+                          ? uploadProgress
+                          : isExtracting
+                            ? "Extracting EXIF metadata..."
+                            : uploadProgress}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <MapPicker
@@ -389,14 +392,12 @@ export default function PhotoGalleryUpload({
           <section className="rounded-lg border border-primary bg-background-second text-foreground p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-semibold">Metadata Preview</h2>
-              <span className="text-sm">
-                {metadataPreview.length} photos
-              </span>
+              <span className="text-sm">{metadataPreview.length} photos</span>
             </div>
 
             <div className="mt-4 max-h-[560px] space-y-3 overflow-y-auto pr-1">
               {metadataPreview.length === 0 ? (
-                <div className="flex min-h-48 items-center justify-center rounded-md bg-white text-sm">
+                <div className="flex min-h-48 items-center justify-center rounded-md border border-foreground text-sm">
                   Select photos to preview extracted date, time, camera, GPS,
                   tags, and category.
                 </div>

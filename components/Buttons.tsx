@@ -20,7 +20,7 @@ export default function Buttons({
   bgColor = "bg-primary",
   colorClasses = `${color} ${bgColor}`,
   additionalClasses = "",
-  className = `${colorClasses} rounded-md px-2 py-1 w-auto text-1x1 lg:text-lg font-semibold flex flex-row items-center hover:bg-opacity-30 transition cursor-pointer ${additionalClasses}`,
+  className = `${colorClasses} rounded-md px-2 py-1 w-auto text-1x1 lg:text-lg font-semibold flex flex-row items-center hover:opacity-70 transition cursor-pointer ${additionalClasses}`,
   disabled,
   children,
 }: ButtonsProps) {

@@ -68,24 +68,24 @@ const CoverPhoto = ({ intervalMs = 5000 }: CoverPhotoProps) => {
   return (
     <div className="relative h-[100vh] sticky top-0">
       <Image
-        className="w-full h-[100vh] object-cover brightness-[40%]"
+        className="w-full h-[100vh] object-cover brightness-[35%]"
         src={currentCover.imageUrl}
         alt={currentCover.fileName}
         width={1920}
         height={1080}
       />
       {/* title, CTA */}
-      <div className="absolute top-[30%] md:top-[35%] left-5 p-4 text-white space-y-4">
-        <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold drop-shadow-xl">
+      <div className="absolute top-[30%] md:top-[35%] left-5 p-4 text-foreground text-shadow-lg/50 space-y-4">
+        <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold">
           Photo Gallery by William Liu
         </h1>
-        <h2 className="text-lg w-[80%] lg:w-[50%] drop-shadow-xl">
+        <h2 className="text-lg w-[80%] lg:w-[50%]">
           Exploring all the amazing photos from my photography journey.
         </h2>
       </div>
       <ScrollIndicator />
       {/* photo info */}
-      <div className="absolute bottom-[10%] right-5 flex flex-col items-end gap-1 p-4 text-xs md:text-lg w-[80%] md:w-full">
+      <div className="absolute bottom-[10%] right-5 flex flex-col items-end gap-1 p-4 text-xs md:text-lg w-[80%] md:w-full text-shadow-lg/50">
         <p className="flex gap-2 items-center text-right">
           <FaLocationDot />
           <span>{currentCover.locationName}</span>

@@ -34,10 +34,10 @@ export default function AboutPage() {
           photos ever since, and I have developed a passion for capturing
           moments and telling stories through my lens. As I also learnt about
           web development, I decided to combine my two passions and create this
-          photography database. While this database is developing in progress, I
+          photography gallery. While this gallery project is developing in progress, I
           hope to share my work and connect with other photographers and
           enthusiasts. I am always looking for new opportunities to learn and
-          grow as a photographer and developer, and I am excited to see where
+          grow as a photographer and software frontend developer, and I am excited to see where
           this journey takes me.
         </p>
         <div className="py-4 space-y-6 ">

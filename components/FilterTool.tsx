@@ -94,7 +94,7 @@ export default function FilterTool({
         </Buttons>
       </div>
       {showFilterTool && (
-        <aside className="w-full rounded-lg bg-background-second text-foreground p-4 border border-primary shadow-lg shadow-primary/60 lg:max-w-xs transition">
+        <aside className="w-full rounded-lg bg-background-second text-foreground p-4 border border-primary lg:max-w-xs transition ease-in-out">
           <div className="flex items-center justify-between gap-3">
             <h3 className="text-lg font-semibold">Filters</h3>
             <div className="flex gap-1">

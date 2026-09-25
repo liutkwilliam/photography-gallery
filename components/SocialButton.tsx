@@ -15,7 +15,7 @@ export default function SocialButton({
 }: SocialButtonProps) {
   return (
     <>
-      <Link href={href} className="text-xl hover:text-blue-500" target="_blank">
+      <Link href={href} className="text-xl hover:text-primary" target="_blank">
         <div className="flex items-center gap-4">
           {icon} {content}
         </div>
